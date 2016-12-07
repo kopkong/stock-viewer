@@ -21,13 +21,13 @@ exports.insertDocuments = function (name, value, callback) {
     });
 };
 
-exports.findDocuments = function () {
+exports.findDocuments = function (name) {
     MongoClient.connect(url, function (err, db) {
         assert.equal(null, err);
 
         // Get the documents collection
-        var collection = db.collection('stock');
-
+        var collection = db.collection(name);
+        
         // Find some documents
         collection.find({}).toArray(function (err, docs) {
             assert.equal(err, null);
