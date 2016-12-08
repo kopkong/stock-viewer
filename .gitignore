@@ -13,6 +13,7 @@
 /.vscode
 .project
 .classpath
+.c9/
 *.launch
 .settings/
 
@@ -33,6 +34,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-#others
 /raw_data
 /test

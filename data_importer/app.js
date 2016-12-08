@@ -4,8 +4,8 @@ const path = require('path'),
     timers  = require('timers'),
     mongo_helper = require('./mongo_helper');
 
-var propName = ['code','date','open','high,low','close','change','volume','money','traded_market_value','market_value' , 'turnover','adjust_price',
-    'report_type','report_date','PE_TTM,PS_TTM','PC_TTM','PB','adjust_price_f'],
+var propName = ['code','date','open','high','low','close','change','volume','money','traded_market_value','market_value' , 'turnover','adjust_price',
+    'report_type','report_date','PE_TTM','PS_TTM','PC_TTM','PB','adjust_price_f'],
     stockDayArray = [];
 
 // 定义日线数据文件路径

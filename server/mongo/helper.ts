@@ -1,6 +1,7 @@
 
-import MongoDb = require('mongodb');
-import assert = require('assert');
+const MongoDb  = require('mongodb');
+const assert   = require('assert');
+const co       = require('co');
 
 const MongoClient = MongoDb.MongoClient;
 const URL = 'mongodb://localhost:27017/stock';
@@ -22,21 +23,12 @@ export default class Helper {
         });
     }
 
-    findDocuments(name) {
-        MongoClient.connect(URL, function (err, db) {
-            assert.equal(null, err);
+    findDocuments = co.wrap(function*(name) {
+        var db = yield MongoClient.connect(URL);
 
-            // Get the documents collection
-            var collection = db.collection(name);
+        var collection = db.collection(name);
 
-            // Find some documents
-            collection.find({}).toArray(function (err, docs) {
-                assert.equal(err, null);
+        return yield collection.find({}).toArray();
 
-                console.log(docs.length);
-                db.close();
-            });
-
-        });
-    }
+    });
 }
