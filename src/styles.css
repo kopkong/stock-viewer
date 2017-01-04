@@ -1,10 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+*, *::after, ::before {
+  padding: 0;
+  margin: 0;
+}
+
+p, div {
+  line-height : 1.5;
+  /*-webkit-user-select: none;*/
+}
+
+button {
+  border: 0;
+  outline: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+html {
+  font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+}
+
+body {
+  min-width: 1024px;
+}
+
 .root-loading {
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
   text-align: center;
+}
+
+.root-loading img {
+  width: 200px;
+  height: 200px;
+  border: 0;
 }
 
 

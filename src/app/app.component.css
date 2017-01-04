@@ -1,0 +1,42 @@
+.menu-header {
+  background: linear-gradient(45deg,#2b2937,#fff);
+  color: #fff;
+
+  height: 50px;
+  line-height: 50px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+nav {
+  float: left;
+  margin-left: 20px;
+  width: 100px;
+  text-align: center;
+}
+
+nav a {
+  display: inline-block;
+  width: 50px;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin-top: 10px;
+  /*background-color: #2b2937;*/
+  color: #9095aa;
+  border-radius: 4px;
+}
+
+nav a:visited, a:link {
+  color: cornsilk;
+  /*background-color: #394264;*/
+}
+
+nav a:hover {
+  color: cornsilk;
+  background-color: #394264;
+}
+
+nav a.active {
+  color: #fff;
+  background-color: #394264;
+}

@@ -1,18 +1,30 @@
 /**
  * Created by colin on 2016/12/9.
  */
-import { RouterModule, Route } from '@angular/router';
-import { ModuleWithProviders } from '@angular/core';
+import { NgModule }       from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-const routes: Route[] = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard'},
-  { loadChildren: 'app/dashboard/dashboard.module#DashboardModule', path: 'dashboard' },
-  { loadChildren: 'app/profile/profile.module#ProfileModule', path: 'profile' }
+import { StockRecommendComponent } from './stock-recommend/stock-recommend.component';
+import { StockComponent } from './stock/stock.component';
+
+const routes : Routes = [
+  {
+    path: 'stock-recommend',
+    component: StockRecommendComponent
+  },
+  {
+    path: 'stock/:id',
+    component: StockComponent
+  },
+  {
+    path: '',
+    redirectTo: '/stock-recommend',
+    pathMatch: 'full'
+  }
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(
-  routes,
-  {
-    useHash: true
-  }
-);
+@NgModule({
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
+})
+export class AppRoutingModule {}
