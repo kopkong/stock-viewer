@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+.root-loading {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+

@@ -16,18 +16,18 @@ exports.insertDocuments = function (name, value, callback) {
 
             db.close();
 
-            callback();
+            if(typeof callback === 'function') callback();
         });
     });
 };
 
-exports.findDocuments = function (name) {
+exports.findDocuments = function (name, callback) {
     MongoClient.connect(url, function (err, db) {
         assert.equal(null, err);
 
         // Get the documents collection
         var collection = db.collection(name);
-        
+
         // Find some documents
         collection.find({}).toArray(function (err, docs) {
             assert.equal(err, null);
@@ -35,6 +35,9 @@ exports.findDocuments = function (name) {
             console.log(docs.length);
 
             db.close();
+
+          if(typeof callback === 'function') callback(docs);
+
         });
 
     });
