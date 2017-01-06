@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import './rxjs-extension';
 
+import { FixedFloatPipe } from '../pipe/fixed-float.pipe';
+
 import { StockRecommendService } from '../service/stock-recommend.service';
 
 import { AppComponent } from './app.component';
@@ -20,7 +22,8 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     StockComponent,
     PageComponent,
     StockRecommendComponent,
-    StockSearchComponent
+    StockSearchComponent,
+    FixedFloatPipe
   ],
   imports: [
     BrowserModule,

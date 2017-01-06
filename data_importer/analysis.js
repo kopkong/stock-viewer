@@ -31,9 +31,9 @@ function analysisOneStock(doc) {
 
   doc.forEach(d => {
     if (d.PE_TTM) {
-      if (d.PE_TTM > maxPE) maxPE = d.PE_TTM;
+      if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
 
-      if (d.PE_TTM < minPE) minPE = d.PE_TTM;
+      if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
 
       totalPE += Number(d.PE_TTM);
 
@@ -53,17 +53,20 @@ function analysisOneStock(doc) {
       'max_PE': maxPE,
       'min_PE': minPE,
       'avg_PE': totalPE / validSamples,
-      'last_PE': lastDay.PE_TTM,
+      'last_PE': Number(lastDay.PE_TTM),
       'first_date': firstDay.date,
       'last_date' : lastDay.date,
-      'first_price': firstDay.adjust_price,
-      'last_price': lastDay.adjust_price,
+      'first_price': Number(firstDay.adjust_price),
+      'last_price': Number(lastDay.adjust_price),
       'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
       'years' : years,
       'expand_ratio' : expand_ratio
     };
 
-    statsArray.push(stat);
+    // make sure data is valid
+    if(typeof stat.last_PE === 'number' && typeof stat.min_PE === 'number'){
+      statsArray.push(stat);
+    }
   }
 
   cursor ++;

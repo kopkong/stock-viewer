@@ -7,8 +7,8 @@ export class StockRecommend {
   min_PE: number;
   avg_PE: number;
   last_PE: number;
-  first_date: number;
-  last_date : number;
+  first_date: string;
+  last_date : string;
   first_price: number;
   last_price: number;
   last_pe_ratio: number;

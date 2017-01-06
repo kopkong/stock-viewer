@@ -1,10 +1,12 @@
 
-const MongoDb  = require('mongodb');
-const assert   = require('assert');
-const co       = require('co');
+const MongoDb   = require('mongodb');
+const assert    = require('assert');
+const co        = require('co');
+const fs        = require('fs');
+const path      = require('path');
 
 const MongoClient = MongoDb.MongoClient;
-const URL = 'mongodb://localhost:27017/stock';
+const URL = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../proxy.conf.json'),'utf8')).mongo.url;
 
 export default class Helper {
     insertDocuments(name, value, callback) {
@@ -23,12 +25,12 @@ export default class Helper {
         });
     }
 
-    findDocuments = co.wrap(function*(name) {
+    findDocuments = co.wrap(function*(name, query, sort) {
         var db = yield MongoClient.connect(URL);
 
         var collection = db.collection(name);
 
-        return yield collection.find({}).toArray();
+        return yield collection.find(query).sort(sort).toArray();
 
     });
 }

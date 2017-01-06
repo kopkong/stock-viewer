@@ -3,7 +3,11 @@
  */
 const MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
-    url = 'mongodb://localhost:27017/stock';
+    fs = require('fs'),
+    path = require('path'),
+    url = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).mongo.url;
+
+console.log(url);
 
 exports.insertDocuments = function (name, value, callback) {
     MongoClient.connect(url, function (err, db) {
