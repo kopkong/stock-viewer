@@ -25,6 +25,7 @@
 npm-debug.log
 testem.log
 /typings
+proxy.conf.json
 
 # e2e
 /e2e/*.js
