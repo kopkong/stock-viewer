@@ -44,7 +44,7 @@ function analysisOneStock(doc) {
   const firstDay = doc[doc.length - 2];
   const lastDay  = doc[0];
 
-  if(lastDay.date.slice(0,4) === '2016') {
+  if(lastDay.date.slice(0,4) === '2017') {
     const years = lastDay.date.slice(0,4) - firstDay.date.slice(0,4);
     const expand_ratio = Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / (years -1 ));
 

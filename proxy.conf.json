@@ -1,9 +1,0 @@
-{
-    "/api": {
-        "target": "http://localhost:4300",
-        "secure": false
-    },
-    "mongo": {
-      "url" : "mongodb://localhost:27017/stock"
-    }
-}

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HashLocationStrategy, Location, LocationStrategy} from '@angular/common';
 
 import './rxjs-extension';
 
@@ -31,7 +32,7 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     HttpModule,
     AppRoutingModule
   ],
-  providers: [StockRecommendService],
+  providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}, StockRecommendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

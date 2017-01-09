@@ -6,7 +6,7 @@ const fs        = require('fs');
 const path      = require('path');
 
 const MongoClient = MongoDb.MongoClient;
-const URL = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../proxy.conf.json'),'utf8')).mongo.url;
+const URL = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../proxy.conf.json'),'utf8')).mongo.url;
 
 export default class Helper {
     insertDocuments(name, value, callback) {
