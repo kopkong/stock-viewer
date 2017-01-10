@@ -26,6 +26,7 @@ npm-debug.log
 testem.log
 /typings
 proxy.conf.json
+ecosystem.config.js
 
 # e2e
 /e2e/*.js
