@@ -1,0 +1,22 @@
+<p>
+  市盈率排名
+</p>
+
+<table class="stock-recommend-datatable">
+  <tr class="stock-recommend-dataheader">
+    <th>股票</th>
+    <th>最低PE</th>
+    <th>最高PE</th>
+    <th>平均PE</th>
+    <th>最近PE</th>
+    <th>最近PE / 历史最低PE</th>
+  </tr>
+  <tr *ngFor="let stockRec of stockRecommends" class="stock-recommend-datarow">
+    <td>{{stockRec.code}}</td>
+    <td>{{ stockRec.min_PE | fixedFloat : 2 }}</td>
+    <td>{{ stockRec.max_PE | fixedFloat : 2 }}</td>
+    <td>{{ stockRec.avg_PE | fixedFloat : 2 }}</td>
+    <td>{{ stockRec.last_PE | fixedFloat : 2}}</td>
+    <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
+  </tr>
+</table>

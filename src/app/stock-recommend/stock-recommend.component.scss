@@ -1,0 +1,23 @@
+.stock-recommend-datatable {
+  border-collapse: collapse;
+
+  th, td {
+    min-width: 100px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  th {
+    padding: 1em;
+    color: #9095aa;
+  }
+
+  td {
+    padding: .5em;
+  }
+
+  tr:nth-of-type(2n+1){
+    background:#394264;
+    color: #fff;
+  }
+}
