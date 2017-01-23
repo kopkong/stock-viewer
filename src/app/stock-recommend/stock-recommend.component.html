@@ -1,6 +1,6 @@
-<p>
-  市盈率排名
-</p>
+<header class="stock-recommend-header">
+  数据更新于：{{updateDate}}
+</header>
 
 <table class="stock-recommend-datatable">
   <tr class="stock-recommend-dataheader">
@@ -20,3 +20,7 @@
     <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
   </tr>
 </table>
+
+<footer class="stock-recommend-footer">
+  数据更新于：{{updateDate}}
+</footer>

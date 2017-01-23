@@ -52,10 +52,20 @@ function readStockCsv() {
 function saveStock(stock) {
     console.log('saving ', stock.code);
     if (stock) {
-        mongo_helper.insertDocuments(stock.code, stock.dayArray, readStockCsv);
+        mongo_helper.deleteDocuments(stock.code, {}, function() {
+          mongo_helper.insertDocuments(stock.code, stock.dayArray, readStockCsv);
+        });
     }
 }
 
+function logImportData() {
+  var today = new Date().toLocaleDateString();
+  console.log('today is ' + today );
+
+  mongo_helper.updateDocument('config',  {'name': 'import_date'}, {'name': 'import_date', 'value': today }, true );
+}
+
+logImportData();
 readStockCsv();
 
 

@@ -3,10 +3,13 @@
 </h1>
 
 <nav>
-  <a routerLink="/stock-recommend" routerLinkActive="active">股票</a>
-  <a routerLink="/civ6" routerLinkActive="active">Civ6</a>
-  <a routerLink="/bronze" routerLinkActive="active">青铜器</a>
-  <a routerLink="/porcelain" routerLinkActive="active">瓷器</a>
+  <a routerLink="/stock-recommend" routerLinkActive="active">筛选股票</a>
+  <a routerLink="/stock" routerLinkActive="active">详细查看</a>
+  <a routerLink="/bronze" routerLinkActive="active">其他1</a>
+  <a routerLink="/porcelain" routerLinkActive="active">其他2</a>
 </nav>
 
-<router-outlet></router-outlet>
+<section class="content">
+  <router-outlet></router-outlet>
+</section>
+

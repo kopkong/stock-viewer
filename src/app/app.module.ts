@@ -9,6 +9,7 @@ import './rxjs-extension';
 import { FixedFloatPipe } from '../pipe/fixed-float.pipe';
 
 import { StockRecommendService } from '../service/stock-recommend.service';
+import { ConfigService } from '../service/config.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
@@ -16,6 +17,7 @@ import { StockComponent } from './stock/stock.component';
 import { PageComponent } from '../common/page/page.component';
 import { StockRecommendComponent } from './stock-recommend/stock-recommend.component';
 import { StockSearchComponent } from './stock-search/stock-search.component' ;
+
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     HttpModule,
     AppRoutingModule
   ],
-  providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}, StockRecommendService],
+  providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
+    StockRecommendService, ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

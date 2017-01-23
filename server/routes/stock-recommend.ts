@@ -13,9 +13,11 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
   const start : Number = pageIndex * pageSize;
   const end   : Number = ( pageIndex + 1) * pageSize;
 
-  let query = helper.findDocuments('0_pe_table',
-    { last_pe_ratio: { $gt: 0 }, min_PE: { $gt: 0 }, last_PE: { $gt: 0, $lt: 50 }},
-    { last_pe_ratio: 1 });
+  let query = helper.findDocuments({
+      name:'0_pe_table',
+      query: { last_pe_ratio: { $gt: 0 }, min_PE: { $gt: 0 }, last_PE: { $gt: 0, $lt: 50 }},
+      sort: { last_pe_ratio: 1 }
+    });
 
   query.then(function(value){
     let ary = value;

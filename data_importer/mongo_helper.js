@@ -25,6 +25,38 @@ exports.insertDocuments = function (name, value, callback) {
     });
 };
 
+exports.deleteDocuments = function (name, value, callback) {
+  MongoClient.connect(url, function (err, db) {
+    assert.equal(null, err);
+
+    var collection = db.collection(name);
+
+    collection.deleteMany(value, function (err, result) {
+      assert.equal(err, null);
+
+      db.close();
+
+      if(typeof callback === 'function') callback();
+    });
+  });
+};
+
+exports.updateDocument = function(name, filter, update, upsert, callback) {
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+
+    var collection = db.collection(name);
+
+    collection.updateOne(filter, update, {upsert: upsert}, function(err, result) {
+      assert.equal(err, null);
+
+      db.close();
+
+      if(typeof callback === 'function') callback();
+    });
+  });
+};
+
 exports.findDocuments = function (name, callback) {
     MongoClient.connect(url, function (err, db) {
         assert.equal(null, err);
@@ -43,7 +75,6 @@ exports.findDocuments = function (name, callback) {
           if(typeof callback === 'function') callback(docs);
 
         });
-
     });
 };
 

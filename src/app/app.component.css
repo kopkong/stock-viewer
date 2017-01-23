@@ -17,7 +17,7 @@ nav {
 
 nav a {
   display: inline-block;
-  width: 50px;
+  width: 80px;
   padding: 5px 10px;
   text-decoration: none;
   margin-top: 10px;
@@ -39,4 +39,9 @@ nav a:hover {
 nav a.active {
   color: #fff;
   background-color: #394264;
+}
+
+section.content {
+  margin-left: 140px;
+  padding: 10px;
 }

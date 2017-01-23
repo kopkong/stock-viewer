@@ -25,12 +25,12 @@ export default class Helper {
         });
     }
 
-    findDocuments = co.wrap(function*(name, query, sort) {
+    findDocuments = co.wrap(function*(param) {
         var db = yield MongoClient.connect(URL);
 
-        var collection = db.collection(name);
+        var collection = db.collection(param.name);
 
-        return yield collection.find(query).sort(sort).toArray();
+        return yield collection.find(param.query).sort(param.sort).toArray();
 
     });
 }
