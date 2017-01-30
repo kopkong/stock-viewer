@@ -1,3 +1,7 @@
-<p>
-  page works!
-</p>
+<div class="page-container">
+  <button class="page-prev"> < </button>
+  <ul class="page-list">
+    <li *ngFor="let p of currentPages" class="page-item" [ngClass]="{'cur': p == currentPage}">{{p}}</li>
+  </ul>
+  <button class="page-next"> > </button>
+</div>

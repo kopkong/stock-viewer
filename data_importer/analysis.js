@@ -5,7 +5,7 @@ const path = require('path'),
   fs = require('fs'),
   mongo_helper = require('./mongo_helper');
 
-const stockDataPath = path.resolve(__dirname, '../raw_data/stock data'),
+const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
   files = fs.readdirSync(stockDataPath),
   fileLength = files.length,
   statsArray = [];

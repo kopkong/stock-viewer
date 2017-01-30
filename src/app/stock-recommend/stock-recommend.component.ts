@@ -5,7 +5,7 @@ import { StockRecommendService } from '../../service/stock-recommend.service';
 import { ConfigService } from '../../service/config.service';
 
 @Component({
-  selector: 'app-stock-recommend',
+  selector: 'stock-recommend',
   templateUrl: './stock-recommend.component.html',
   styleUrls: ['./stock-recommend.component.scss']
 })

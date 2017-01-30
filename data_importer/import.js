@@ -11,7 +11,7 @@ var propName = ['code','date','open','high','low','close','change','volume','mon
     stockDayArray = [];
 
 // 定义日线数据文件路径
-const stockDataPath = path.resolve(__dirname, '../raw_data/stock data'),
+const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
     files = fs.readdirSync(stockDataPath),
     fileLength = files.length;
 

@@ -1,5 +1,5 @@
 <header class="stock-recommend-header">
-  数据更新于：{{updateDate}}
+  搜索：
 </header>
 
 <table class="stock-recommend-datatable">
@@ -18,6 +18,9 @@
     <td>{{ stockRec.avg_PE | fixedFloat : 2 }}</td>
     <td>{{ stockRec.last_PE | fixedFloat : 2}}</td>
     <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
+  </tr>
+  <tr>
+    <td colspan="6" class="pager"><page></page></td>
   </tr>
 </table>
 
