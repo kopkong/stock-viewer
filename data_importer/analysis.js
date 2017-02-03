@@ -3,19 +3,26 @@
  */
 const path = require('path'),
   fs = require('fs'),
-  mongo_helper = require('./mongo_helper');
+  mongo_helper = require('./mongo_helper'),
+  http = require('http');
+
+const propName = ['code','name','industry'];
 
 const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
   files = fs.readdirSync(stockDataPath),
   fileLength = files.length,
-  statsArray = [];
+  statsArray = [],
+  basicInfoMap = new Map();
 
 let cursor = 0;
 
 function loopStock() {
   if(cursor >= fileLength){
     console.log('分析已完毕');
-    mongo_helper.insertDocuments('0_pe_table', statsArray);
+    mongo_helper.deleteDocuments('0_pe_table', {}, function() {
+      mongo_helper.insertDocuments('0_pe_table', statsArray);
+    });
+
     return;
   }
 
@@ -43,10 +50,14 @@ function analysisOneStock(doc) {
 
   const firstDay = doc[doc.length - 2];
   const lastDay  = doc[0];
+  const newThree = firstDay.code.startsWith('sz300');
 
-  if(lastDay.date.slice(0,4) === '2017') {
-    const years = lastDay.date.slice(0,4) - firstDay.date.slice(0,4);
-    const expand_ratio = Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / (years -1 ));
+  if(lastDay.date.slice(0,4) === '2017' && !newThree) {
+    const years = (new Date(lastDay.date).getTime() - new Date(firstDay.date).getTime()) / ( 365 * 24 * 3600 * 1000 );
+    const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
+      : 0;
+    const basicInfo = basicInfoMap.get(firstDay.code);
+    // const name = basicInfo && basicInfo.name;
 
     const stat = {
       'code':   firstDay.code,
@@ -60,7 +71,9 @@ function analysisOneStock(doc) {
       'last_price': Number(lastDay.adjust_price),
       'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
       'years' : years,
-      'expand_ratio' : expand_ratio
+      'expand_ratio' : expand_ratio,
+      'name' : basicInfo && basicInfo.name,
+      'industry': basicInfo&& basicInfo.industry
     };
 
     // make sure data is valid
@@ -73,6 +86,26 @@ function analysisOneStock(doc) {
   loopStock();
 }
 
+function getBasicInfo() {
+  const info_file = path.resolve(stockDataPath,'../name_info.csv');
+
+  const content = fs.readFileSync(info_file, 'utf8').split('\r\n');
+
+  for (let i = 1; i < content.length; i++) {
+    let ary = content[i].split(','),
+      obj = {};
+
+    if(ary && ary.length === 3) {
+      propName.forEach((v, index) => {
+        obj[v] = ary[index].toLowerCase();
+      });
+
+      basicInfoMap.set(obj['code'], obj);
+    }
+  }
+}
+
+getBasicInfo();
 loopStock();
 
 

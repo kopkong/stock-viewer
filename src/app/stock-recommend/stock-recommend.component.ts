@@ -14,21 +14,39 @@ export class StockRecommendComponent implements OnInit {
   stockRecommends : StockRecommend[];
   recommendLength : number;
   updateDate      : string;
+  currentPageIndex: number;
+  searchString    : string;
 
   constructor(private recService: StockRecommendService,
     private cfgService:  ConfigService){};
 
   ngOnInit() {
-    this.recService.getData()
-      .then(recommends => {
-        this.stockRecommends = recommends.list;
-        this.recommendLength = recommends.list.length;
-      } );
+    this.currentPageIndex = 1;
+
+    this.loadRecommendData();
 
     this.cfgService.getData()
       .then(config => {
         this.updateDate = config.import_date;
       })
+  }
+
+  pageSelect(page: number) {
+    this.currentPageIndex = page;
+
+    this.loadRecommendData();
+    // this.searchString = 'pageSize=10&pageIndex=' + this.currentPageIndex;
+  }
+
+  loadRecommendData() {
+    this.searchString = 'pageSize=10&pageIndex=' + (this.currentPageIndex - 1);
+    this.recService.getData(this.searchString)
+      .then(recommends => {
+        this.stockRecommends = recommends.list;
+        this.recommendLength = Math.ceil(recommends.count / 10);
+
+        console.log(this.stockRecommends);
+      } );
   }
 
 }

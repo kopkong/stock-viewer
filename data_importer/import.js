@@ -31,22 +31,23 @@ function readStockCsv() {
     const content = fs.readFileSync(filePath, 'utf8').split('\n');
 
     for (let i = 1; i < content.length; i++) {
-        let ary = content[i].split(','),
-            obj = {};
+      let ary = content[i].split(','),
+        obj = {};
 
-        propName.forEach((v, index) => {
-            obj[v] = ary[index];
-        });
+      propName.forEach((v, index) => {
+        obj[v] = ary[index];
+      });
 
-        stockDayArray.push(obj);
+      stockDayArray.push(obj);
     }
 
     saveStock({
-        code: stockDayArray[0].code,
-        dayArray: stockDayArray
+      code: stockDayArray[0].code,
+      dayArray: stockDayArray
     });
 
     cursor ++;
+
 }
 
 function saveStock(stock) {

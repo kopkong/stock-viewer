@@ -7,6 +7,7 @@ import { HashLocationStrategy, Location, LocationStrategy} from '@angular/common
 import './rxjs-extension';
 
 import { FixedFloatPipe } from '../pipe/fixed-float.pipe';
+import { FixedPercenterPipe } from '../pipe/fixed-percent.pipe';
 
 import { StockRecommendService } from '../service/stock-recommend.service';
 import { ConfigService } from '../service/config.service';
@@ -26,7 +27,8 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     PageComponent,
     StockRecommendComponent,
     StockSearchComponent,
-    FixedFloatPipe
+    FixedFloatPipe,
+    FixedPercenterPipe
   ],
   imports: [
     BrowserModule,
@@ -35,7 +37,7 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     AppRoutingModule
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
-    StockRecommendService, ConfigService],
+    StockRecommendService, ConfigService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

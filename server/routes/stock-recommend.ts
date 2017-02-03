@@ -8,10 +8,11 @@ const stockRecommendRouter: Router = Router();
 const helper : MongoHelper = new MongoHelper();
 
 stockRecommendRouter.get('',  (request: Request, response: Response) => {
-  const pageIndex : any = request.query.pageIndex || 0;
-  const pageSize  : any = request.query.pageSize  || 10;
-  const start : Number = pageIndex * pageSize;
-  const end   : Number = ( pageIndex + 1) * pageSize;
+  const pageIndex : number = Number(request.query.pageIndex) || 0;
+  const pageSize  : number = Number(request.query.pageSize)  || 10;
+  const start : number = pageIndex * pageSize;
+  const end   : number = ( pageIndex + 1) * pageSize;
+
 
   let query = helper.findDocuments({
       name:'0_pe_table',

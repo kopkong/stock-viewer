@@ -3,7 +3,7 @@
  */
 
 import { Injectable, Injector} from '@angular/core';
-import { Response, Http } from '@angular/http';
+import { Response, Http, Request, RequestMethod } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -16,8 +16,12 @@ export class BaseService {
     this.http = injector.get(Http);
   }
 
-  getData() : Promise<any>{
-    return this.http.get(this.url)
+  getData(search?: string) : Promise<any>{
+    return this.http.request(new Request({
+      method: RequestMethod.Get,
+      url: this.url,
+      search: search
+    }))
       .toPromise()
       .then(response => {
         return response.json();
