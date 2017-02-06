@@ -50,4 +50,18 @@ export class PageComponent {
     this._index = page;
   }
 
+  scrollPrev() {
+    if(this._screen > 1) {
+      this._screen --;
+      this.selectPage(this.currentPages[0]);
+    }
+  }
+
+  scrollNext() {
+    if(this.currentPages.slice(-1)[0] < this.pageTotal) {
+      this._screen ++;
+      this.selectPage(this.currentPages[0]);
+    }
+  }
+
 }

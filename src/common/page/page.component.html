@@ -1,8 +1,8 @@
 <div class="page-container">
-  <button class="page-prev"> < </button>
+  <button class="page-prev" (click)="scrollPrev()" > < </button>
   <ul class="page-list">
     <li *ngFor="let p of currentPages" (click)="selectPage(p)" class="page-item" [ngClass]="{'cur': p == pageIndex}">{{p}}</li>
   </ul>
-  <span class="page-info"> 页数： {{pageIndex}} /  {{pageTotal}} </span>
-  <button class="page-next"> > </button>
+  <span class="page-info"> 页数： {{pageIndex}} / {{pageTotal}} </span>
+  <button class="page-next" (click)="scrollNext()" > > </button>
 </div>

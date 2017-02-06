@@ -17,7 +17,9 @@ import { AppRoutingModule } from './app.routing';
 import { StockComponent } from './stock/stock.component';
 import { PageComponent } from '../common/page/page.component';
 import { StockRecommendComponent } from './stock-recommend/stock-recommend.component';
-import { StockSearchComponent } from './stock-search/stock-search.component' ;
+import { StockSearchComponent } from './stock-search/stock-search.component';
+import { CheckboxComponent } from '../common/checkbox/checkbox.component';
+import { ButtonComponent } from '../common/button/button.component' ;
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import { StockSearchComponent } from './stock-search/stock-search.component' ;
     StockRecommendComponent,
     StockSearchComponent,
     FixedFloatPipe,
-    FixedPercenterPipe
+    FixedPercenterPipe,
+    CheckboxComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,

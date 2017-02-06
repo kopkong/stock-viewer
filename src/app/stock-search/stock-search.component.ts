@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-stock-search',
+  selector: 'stock-search',
   templateUrl: './stock-search.component.html',
-  styleUrls: ['./stock-search.component.css']
+  styleUrls: ['./stock-search.component.scss']
 })
 export class StockSearchComponent implements OnInit {
+
+  @Input()
+  filters: string[];
 
   constructor() { }
 

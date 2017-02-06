@@ -1,21 +1,15 @@
 <header class="stock-recommend-header">
-  搜索：
+  筛选条件：
+  <ul class="stock-recommend-filter">
+    <li *ngFor="let filter of filters">
+      <st-checkbox [inputWord]="filter.text" [(ngModel)]="filter.checked" (ngModelChange)="filterChange()"></st-checkbox>
+    </li>
+  </ul>
 </header>
 
 <table class="stock-recommend-datatable">
   <tr class="stock-recommend-dataheader">
-    <th>股票</th>
-    <th>名字</th>
-    <th>上市年数</th>
-    <th>年均增长率</th>
-    <!--<th>最低PE</th>-->
-    <!--<th>最高PE</th>-->
-    <!--<th>平均PE</th>-->
-    <!--<th>最近PE</th>-->
-    <th>最近交易日</th>
-    <th>最近收盘价</th>
-    <th>最近PE / 历史最低PE</th>
-    <th>行业</th>
+    <th *ngFor="let header of headers">{{header}}</th>
   </tr>
   <tr *ngFor="let stockRec of stockRecommends" class="stock-recommend-datarow">
     <td>{{stockRec.code}}</td>
@@ -24,15 +18,14 @@
     <td>{{stockRec.expand_ratio | fixedPercent: 2}}</td>
     <td>{{stockRec.last_date }}</td>
     <td>{{stockRec.last_price | fixedFloat: 1}}</td>
-    <!--<td>{{ stockRec.min_PE | fixedFloat : 2 }}</td>-->
-    <!--<td>{{ stockRec.max_PE | fixedFloat : 2 }}</td>-->
-    <!--<td>{{ stockRec.avg_PE | fixedFloat : 2 }}</td>-->
-    <!--<td>{{ stockRec.last_PE | fixedFloat : 2}}</td>-->
     <td style="color: salmon;">{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
     <td>{{stockRec.industry}}</td>
   </tr>
+  <tr [hidden]="recommendLength">
+    <td [attr.colspan]="headers.length" >没有查询到数据哦！</td>
+  </tr>
   <tr>
-    <td colspan="6" class="pager"><page [pageTotal]="recommendLength" [pageIndex]="currentPageIndex" (onPageSelect)="pageSelect($event)"></page></td>
+    <td [attr.colspan]="headers.length" class="pager"><page [pageTotal]="recommendLength" [pageIndex]="currentPageIndex" (onPageSelect)="pageSelect($event)"></page></td>
   </tr>
 </table>
 

@@ -8,6 +8,15 @@
   color: #b1a69d;
 }
 
+.stock-recommend-filter {
+  display: inline-block;
+  list-style: none;
+  li {
+    display: inline-block;
+    margin: 10px;
+  }
+}
+
 .stock-recommend-datatable {
   border-collapse: collapse;
   margin: 10px 0 ;
@@ -30,6 +39,10 @@
   tr:nth-of-type(2n+1){
     background:#394264;
     color: #fff;
+  }
+
+  tr:last-of-type{
+    background: #fff;
   }
 
   td.pager {

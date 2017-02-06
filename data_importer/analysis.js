@@ -19,8 +19,8 @@ let cursor = 0;
 function loopStock() {
   if(cursor >= fileLength){
     console.log('分析已完毕');
-    mongo_helper.deleteDocuments('0_pe_table', {}, function() {
-      mongo_helper.insertDocuments('0_pe_table', statsArray);
+    mongo_helper.deleteDocuments('pe_analysis', {}, function() {
+      mongo_helper.insertDocuments('pe_analysis', statsArray);
     });
 
     return;
