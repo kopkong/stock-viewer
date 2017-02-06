@@ -1,0 +1,32 @@
+$size : 16px;
+
+.st-checkbox {
+  &::before {
+    display: inline-block;
+    content: '';
+    width: $size;
+    height: $size;
+    background: #394264;
+    border-radius: 2px;
+    margin-right: 4px;
+    text-align: center;
+  }
+
+  vertical-align: top;
+  color: #c8cad2;
+  font-size: $size;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.st-checkbox.checked {
+  &::before {
+    content: '✓';
+    background: #1abc9c;
+    color: #fff;
+  }
+
+  color: #656565;
+}
