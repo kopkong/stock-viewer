@@ -38,7 +38,10 @@ function readStockCsv() {
         obj[v] = ary[index];
       });
 
-      stockDayArray.push(obj);
+      // 将日期转成timestamp
+      obj['date'] = new Date(obj['date']).getTime();
+
+      if(obj.code) stockDayArray.push(obj);
     }
 
     saveStock({
@@ -59,15 +62,15 @@ function saveStock(stock) {
 }
 
 function logImportData() {
-  var today = new Date(),
-    year = today.getFullYear(),
-    month = today.getMonth() + 1,
-    day = today.getDate(),
-    dataString = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+  var today = new Date('2017-02-06').getTime();
+    // year = today.getFullYear(),
+    // month = today.getMonth() + 1,
+    // day = today.getDate(),
+    // dataString = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
 
-  console.log('today is ' + dataString );
+  // console.log('today is ' + dataString );
 
-  mongo_helper.updateDocument('config',  {'name': 'import_date'}, {'name': 'import_date', 'value': dataString }, true );
+  mongo_helper.updateDocument('config',  {'name': 'import_date'}, {'name': 'import_date', 'value': today }, true );
 }
 
 logImportData();

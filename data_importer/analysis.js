@@ -15,10 +15,11 @@ const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../pro
   basicInfoMap = new Map();
 
 let cursor = 0;
+console.time('分析已完毕');
 
 function loopStock() {
   if(cursor >= fileLength){
-    console.log('分析已完毕');
+    console.timeEnd('分析已完毕');
     mongo_helper.deleteDocuments('pe_analysis', {}, function() {
       mongo_helper.insertDocuments('pe_analysis', statsArray);
     });
@@ -27,7 +28,7 @@ function loopStock() {
   }
 
   const name = files[cursor].replace('.csv','');
-  mongo_helper.findDocuments(name, analysisOneStock);
+  mongo_helper.findDocuments(name, {date: -1 },analysisOneStock);
 }
 
 function analysisOneStock(doc) {
@@ -48,12 +49,13 @@ function analysisOneStock(doc) {
     }
   });
 
-  const firstDay = doc[doc.length - 2];
+  const firstDay = doc[doc.length - 1];
   const lastDay  = doc[0];
+  const lastDate = new Date(lastDay.date);
   const newThree = firstDay.code.startsWith('sz300');
 
-  if(lastDay.date.slice(0,4) === '2017' && !newThree) {
-    const years = (new Date(lastDay.date).getTime() - new Date(firstDay.date).getTime()) / ( 365 * 24 * 3600 * 1000 );
+  if(lastDate.getFullYear() === 2017 && !newThree) {
+    const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
     const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
       : 0;
     const basicInfo = basicInfoMap.get(firstDay.code);
@@ -83,6 +85,7 @@ function analysisOneStock(doc) {
   }
 
   cursor ++;
+  console.log('分析中: ' + cursor + ' / ' + fileLength);
   loopStock();
 }
 

@@ -57,7 +57,7 @@ exports.updateDocument = function(name, filter, update, upsert, callback) {
   });
 };
 
-exports.findDocuments = function (name, callback) {
+exports.findDocuments = function (name, sort,callback) {
     MongoClient.connect(url, function (err, db) {
         assert.equal(null, err);
 
@@ -65,10 +65,8 @@ exports.findDocuments = function (name, callback) {
         var collection = db.collection(name);
 
         // Find some documents
-        collection.find({}).toArray(function (err, docs) {
+        collection.find({}).sort(sort).toArray(function (err, docs) {
             assert.equal(err, null);
-
-            console.log(docs.length);
 
             db.close();
 

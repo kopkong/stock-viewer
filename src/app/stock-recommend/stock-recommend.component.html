@@ -2,9 +2,10 @@
   筛选条件：
   <ul class="stock-recommend-filter">
     <li *ngFor="let filter of filters">
-      <st-checkbox [inputWord]="filter.text" [(ngModel)]="filter.checked" (ngModelChange)="filterChange()"></st-checkbox>
+      <st-checkbox [inputWord]="filter.text" [(ngModel)]="filter.checked"></st-checkbox>
     </li>
   </ul>
+  <button class="filter-button" (click)="loadRecommendData()">重新选择</button>
 </header>
 
 <table class="stock-recommend-datatable">
@@ -16,7 +17,7 @@
     <td>{{stockRec.name}}</td>
     <td>{{stockRec.years | fixedFloat : 1}}</td>
     <td>{{stockRec.expand_ratio | fixedPercent: 2}}</td>
-    <td>{{stockRec.last_date }}</td>
+    <td>{{stockRec.last_date | date : 'shortDate'}}</td>
     <td>{{stockRec.last_price | fixedFloat: 1}}</td>
     <td style="color: salmon;">{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
     <td>{{stockRec.industry}}</td>
@@ -30,5 +31,5 @@
 </table>
 
 <footer class="stock-recommend-footer">
-  数据更新于：{{updateDate}}
+  数据更新于：{{updateDate }}
 </footer>

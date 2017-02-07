@@ -1,6 +1,28 @@
 .stock-recommend-header {
   margin-bottom: 10px;
   color: #b1a69d;
+  vertical-align: top;
+
+  .filter-button {
+    color: #fff;
+    padding: 2px 10px;
+    font-size: 14px;
+    background: #1abc9c;
+    border-radius: 2px;
+    border-bottom: 2px solid #18937b;
+    vertical-align: middle;
+
+    &:hover {
+      background: #18937b;
+      border-bottom: 2px solid #0c5d4d;
+    }
+
+    &:active{
+      background: #0c5d4d;
+      border-bottom: 0;
+      border-top: 2px solid #053e33;
+    }
+  }
 }
 
 .stock-recommend-footer {
@@ -10,6 +32,7 @@
 
 .stock-recommend-filter {
   display: inline-block;
+  margin-right: 20px;
   list-style: none;
   li {
     display: inline-block;

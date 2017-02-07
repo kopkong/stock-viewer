@@ -45,6 +45,7 @@ export class StockRecommendComponent implements OnInit {
   }
 
   filterChange() {
+    console.log('filterChange');
     this.loadRecommendData();
   }
 
