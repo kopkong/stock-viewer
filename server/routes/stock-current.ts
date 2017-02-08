@@ -10,7 +10,6 @@ const stockCurrentRouter:Router = Router();
 stockCurrentRouter.get('/:ids', (request: Request, response: Response) => {
   const ids = request.params.ids;
   const list = ids.split(',');
-  console.log(list);
 
   if(list.length > 0) {
     const options = {
@@ -18,7 +17,7 @@ stockCurrentRouter.get('/:ids', (request: Request, response: Response) => {
       path: '/list=' + ids
     };
 
-    console.log(options);
+    // console.log(options);
 
     let req = http.get(options, function(res) {
       // console.log('STATUS: ' + res.statusCode);
