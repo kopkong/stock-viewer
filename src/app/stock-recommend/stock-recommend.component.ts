@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { StockRecommend } from '../../model/stock-recommend';
 import { StockRecommendService } from '../../service/stock-recommend.service';
 import { ConfigService } from '../../service/config.service';
+import { StockCurrentService } from '../../service/stock-current.service';
 import { StockFilter } from '../../model/filter';
 
 @Component({
@@ -13,11 +14,12 @@ import { StockFilter } from '../../model/filter';
 
 export class StockRecommendComponent implements OnInit {
   stockRecommends : StockRecommend[];
+  stockCurrents   : any[] = [];
   recommendLength : number;
   updateDate      : string;
   currentPageIndex: number;
 
-  headers = ['代码','名字','上市年数','年均增长率','最近交易日','最近收盘价','最近PE / 历史最低PE','行业'];
+  headers = ['代码','名字','行业','统计日期','统计时价','低价指数','当前价格','当前时间'];
   filters = [
     new StockFilter('增长率为正的', true) ,
     new StockFilter('上市满一年的', true) ,
@@ -25,7 +27,9 @@ export class StockRecommendComponent implements OnInit {
   ];
 
   constructor(private recService: StockRecommendService,
-    private cfgService:  ConfigService){};
+    private cfgService: ConfigService,
+    private curService: StockCurrentService
+  ){};
 
   ngOnInit() {
     this.currentPageIndex = 1;
@@ -41,11 +45,6 @@ export class StockRecommendComponent implements OnInit {
   pageSelect(page: number) {
     this.currentPageIndex = page;
 
-    this.loadRecommendData();
-  }
-
-  filterChange() {
-    console.log('filterChange');
     this.loadRecommendData();
   }
 
@@ -65,9 +64,33 @@ export class StockRecommendComponent implements OnInit {
         if(recommends) {
           this.stockRecommends = recommends.list;
           this.recommendLength = Math.ceil(recommends.count / 10);
+
+          this.loadCurrentData();
         }
-        console.log(this.stockRecommends);
       } );
   }
+
+  loadCurrentData() {
+    let codes = this.stockRecommends.map(item => {
+      return item.code;
+    }).toString();
+
+    console.log(codes);
+
+    this.curService.getCurrentStockData(codes)
+      .then(res => {
+        console.log(res.list.length);
+        this.stockCurrents = res.list.map(item => {
+          let array = item.split(',');
+          return {
+            name: array[0],
+            c_price: array[3],
+            c_time: array[30] + ' ' + array[31]
+          }
+        });
+
+      })
+  }
+
 
 }

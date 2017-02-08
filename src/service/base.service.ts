@@ -11,6 +11,7 @@ import 'rxjs/add/operator/toPromise';
 export class BaseService {
   http: Http;
   protected url = '';
+  protected appKey = '123';
 
   constructor(injector: Injector) {
     this.http = injector.get(Http);

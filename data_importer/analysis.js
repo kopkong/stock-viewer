@@ -71,6 +71,7 @@ function analysisOneStock(doc) {
       'last_date' : lastDay.date,
       'first_price': Number(firstDay.adjust_price),
       'last_price': Number(lastDay.adjust_price),
+      'last_close': Number(lastDay.close),
       'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
       'years' : years,
       'expand_ratio' : expand_ratio,

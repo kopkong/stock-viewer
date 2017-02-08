@@ -10,10 +10,6 @@ export class FixedFloatPipe implements PipeTransform {
       return NaN;
     }
 
-    if(typeof value === 'string'){
-      value = parseFloat(value);
-    }
-
     return +value.toFixed(digit);
   }
 }

@@ -12,15 +12,15 @@
   <tr class="stock-recommend-dataheader">
     <th *ngFor="let header of headers">{{header}}</th>
   </tr>
-  <tr *ngFor="let stockRec of stockRecommends" class="stock-recommend-datarow">
+  <tr *ngFor="let stockRec of stockRecommends; let i = index" class="stock-recommend-datarow">
     <td>{{stockRec.code}}</td>
     <td>{{stockRec.name}}</td>
-    <td>{{stockRec.years | fixedFloat : 1}}</td>
-    <td>{{stockRec.expand_ratio | fixedPercent: 2}}</td>
-    <td>{{stockRec.last_date | date : 'shortDate'}}</td>
-    <td>{{stockRec.last_price | fixedFloat: 1}}</td>
-    <td style="color: salmon;">{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
     <td>{{stockRec.industry}}</td>
+    <td>{{stockRec.last_date | date : 'shortDate'}}</td>
+    <td>{{stockRec.last_close.toFixed(2)}}</td>
+    <td style="color: salmon;">{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
+    <td *ngIf="stockCurrents[i]" [ngClass]="{'lower':stockCurrents[i].c_price < stockRec.last_close,'higher':stockCurrents[i].c_price > stockRec.last_close}">{{ stockCurrents[i].c_price }}</td>
+    <td *ngIf="stockCurrents[i]">{{stockCurrents[i].c_time}}</td>
   </tr>
   <tr [hidden]="recommendLength">
     <td [attr.colspan]="headers.length" >没有查询到数据哦！</td>
@@ -31,5 +31,6 @@
 </table>
 
 <footer class="stock-recommend-footer">
-  数据更新于：{{updateDate | date : 'shortDate'}}
+  <p>数据更新于：{{updateDate | date : 'shortDate'}}</p>
+  <p>绿色表示当前的价格比统计计算时更低了，红色表示更高了</p>
 </footer>

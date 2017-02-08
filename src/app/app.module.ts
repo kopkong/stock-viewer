@@ -10,7 +10,9 @@ import { FixedFloatPipe } from '../pipe/fixed-float.pipe';
 import { FixedPercenterPipe } from '../pipe/fixed-percent.pipe';
 
 import { StockRecommendService } from '../service/stock-recommend.service';
+import { StockCurrentService } from '../service/stock-current.service';
 import { ConfigService } from '../service/config.service';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
@@ -41,7 +43,7 @@ import { ButtonComponent } from '../common/button/button.component' ;
     AppRoutingModule
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
-    StockRecommendService, ConfigService ],
+    StockRecommendService, ConfigService, StockCurrentService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

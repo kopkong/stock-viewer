@@ -7,10 +7,11 @@ export class StockRecommend {
   min_PE: number;
   avg_PE: number;
   last_PE: number;
-  first_date: string;
-  last_date : string;
+  first_date: number;
+  last_date : number;
   first_price: number;
-  last_price: number;
+  last_price: number;   // 除权收盘价
+  last_close: number;   // 收盘价
   last_pe_ratio: number;
   years : number;
   expand_ratio : number;
