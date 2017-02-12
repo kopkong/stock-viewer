@@ -9,7 +9,7 @@ const path = require('path'),
 const propName = ['code','name','industry'];
 
 const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
-  files = fs.readdirSync(stockDataPath),
+  files = fs.readdirSync(path.resolve(stockDataPath,'stock data')),
   fileLength = files.length,
   statsArray = [],
   basicInfoMap = new Map();
@@ -91,7 +91,7 @@ function analysisOneStock(doc) {
 }
 
 function getBasicInfo() {
-  const info_file = path.resolve(stockDataPath,'../name_info.csv');
+  const info_file = path.resolve(stockDataPath,'name_info.csv');
 
   const content = fs.readFileSync(info_file, 'utf8').split('\r\n');
 

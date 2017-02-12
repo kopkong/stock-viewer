@@ -8,11 +8,13 @@ const path = require('path'),
 
 var propName = ['code','date','open','high','low','close','change','volume','money','traded_market_value','market_value' , 'turnover','adjust_price',
     'report_type','report_date','PE_TTM','PS_TTM','PC_TTM','PB','adjust_price_f'],
-    stockDayArray = [];
+    indexPropName = ['index_code',	'date',	'open',	'close',	'low',	'high',	'volume',	'money',	'change'],
+    stockDayArray = [],
+    indexDayArray = [];
 
 // 定义日线数据文件路径
 const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
-    files = fs.readdirSync(stockDataPath),
+    files = fs.readdirSync(path.resolve(stockDataPath,'stock data')),
     fileLength = files.length;
 
 let cursor = 0;
@@ -24,7 +26,7 @@ function readStockCsv() {
     }
 
     const file = files[cursor],
-        filePath = path.resolve(stockDataPath, file);
+        filePath = path.resolve(stockDataPath,'stock data', file);
 
     stockDayArray = [];
 
@@ -52,6 +54,34 @@ function readStockCsv() {
     cursor ++;
 }
 
+function readIndexCsv() {
+  const indexFile = path.resolve(stockDataPath,'index data', 'sh000001.csv');
+  const content = fs.readFileSync(indexFile, 'utf8').split('\n');
+
+  for (let i = 1; i < content.length; i++) {
+    let ary = content[i].split(','),
+      obj = {};
+
+    indexPropName.forEach((v, index) => {
+      obj[v] = ary[index];
+    });
+
+    // 将日期转成timestamp
+    obj['date'] = new Date(obj['date']).getTime();
+
+    if(obj.date) indexDayArray.push(obj);
+  }
+
+  if (indexDayArray) {
+    let name = indexDayArray[0].index_code;
+    console.log('saving ', name);
+
+    mongo_helper.deleteDocuments(name, {}, function() {
+      mongo_helper.insertDocuments(name, indexDayArray);
+    });
+  }
+}
+
 function saveStock(stock) {
     console.log('saving ', stock.code);
     if (stock) {
@@ -62,19 +92,16 @@ function saveStock(stock) {
 }
 
 function logImportData() {
-  var today = new Date('2017-02-06').getTime();
-    // year = today.getFullYear(),
-    // month = today.getMonth() + 1,
-    // day = today.getDate(),
-    // dataString = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+  const today = indexDayArray[0].date;
 
-  // console.log('today is ' + dataString );
+  console.log('最近交易日为 ： ' + new Date(today).toLocaleString());
 
   mongo_helper.updateDocument('config',  {'name': 'import_date'}, {'name': 'import_date', 'value': today }, true );
 }
 
-logImportData();
 readStockCsv();
+readIndexCsv();
+logImportData();
 
 
 
