@@ -1,31 +1,49 @@
-# Stock
+# 股价分析小工具
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.21.
+这个工具只是给自己买股票的时候提供价格参考的，低价指数较低的股票表示现在比较便宜可以考虑购买。
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## 项目使用技术和框架
 
-## Code scaffolding
+*   Server:     Angular2
+*   Client:     NodeJs + Express
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
+## 目录结构
 
-## Build
+*   data_importer/
+    *       导入数据和分析数据用的js脚本
+*   server/
+    *       服务端接口代码
+*   src/
+    *   客户端代码
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
+## 项目配置文件proxy.conf.json需要放在项目根目录下
+```javascript
+{
+    "/api": {
+        "target": "http://localhost:4301",
+        "secure": false
+    },
+    "mongo": {
+      "url" : "mongodb://localhost:27017/stock"
+    },
+    "csv": {
+      "zip" : "/Users/colin/Downloads/trading-data@full.20170210.zip",
+      "path": "/Users/colin/WebstormProjects/Stock/raw_data"
+    }
+}
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 打包
 
-## Running end-to-end tests
+`npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+## Deploy
 
-## Deploying to Github Pages
+*   需要先安装配置PM2
+*   `npm run deploy` to deploy the project.
 
-Run `ng github-pages:deploy` to deploy to Github Pages.
+## 准备数据
 
-## Further help
-
-To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+*   先用FTP上传zip数据包到服务器目录。数据包路径应与配置中csv.zip 一致。
+*   登录到远程服务器之后运行 `./data_importer/bat.sh`
