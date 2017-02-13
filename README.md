@@ -36,14 +36,14 @@
 
 ## 打包
 
-`npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+`npm run build` 。 打包文件将保存到根目录下的`/dist`。
 
-## Deploy
+## 发布以及部署
 
-*   需要先安装配置PM2
-*   `npm run deploy` to deploy the project.
+*   需要先安装配置PM2 http://pm2.keymetrics.io/
+*   `npm run deploy` 发布并启动远程项目.
 
 ## 准备数据
 
-*   先用FTP上传zip数据包到服务器目录。数据包路径应与配置中csv.zip 一致。
+*   先用FTP上传zip数据包到服务器目录。数据包路径应与配置中csv.zip 一致。zip数据包获取网站 http://www.yucezhe.com.
 *   登录到远程服务器之后运行 `./data_importer/bat.sh`
