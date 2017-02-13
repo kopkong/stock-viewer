@@ -4,8 +4,8 @@
 
 ## 项目使用技术和框架
 
-*   Server:     Angular2
-*   Client:     NodeJs + Express
+*   Server:     NodeJs + Express
+*   Client:     Angular2
 
 ## 目录结构
 
