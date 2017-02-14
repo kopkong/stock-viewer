@@ -18,9 +18,9 @@
     <td>{{stockRec.industry}}</td>
     <td>{{stockRec.last_date | date : 'shortDate'}}</td>
     <td>{{stockRec.last_close.toFixed(2)}}</td>
-    <td style="color: salmon;">{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
-    <td *ngIf="stockCurrents[i]" [ngClass]="{'lower':stockCurrents[i].c_price < stockRec.last_close,'higher':stockCurrents[i].c_price > stockRec.last_close}">{{ stockCurrents[i].c_price }}</td>
-    <td *ngIf="stockCurrents[i]">{{stockCurrents[i].c_time}}</td>
+    <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
+    <td *ngIf="stockCurrents[i]" >{{ stockCurrents[i].price }}</td>
+    <td *ngIf="stockCurrents[i]" [ngClass]="{'lower':stockCurrents[i].pe_ratio < stockRec.last_pe_ratio,'higher':stockCurrents[i].pe_ratio > stockRec.last_pe_ratio}">{{  stockCurrents[i].pe_ratio.toFixed(2)}}</td>
   </tr>
   <tr [hidden]="recommendLength">
     <td [attr.colspan]="headers.length" >没有查询到数据哦！</td>

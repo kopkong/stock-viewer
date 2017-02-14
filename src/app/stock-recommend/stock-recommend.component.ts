@@ -19,7 +19,7 @@ export class StockRecommendComponent implements OnInit {
   updateDate      : string;
   currentPageIndex: number;
 
-  headers = ['代码','名字','行业','统计日期','统计时价','低价指数','当前价格','当前时间'];
+  headers = ['代码','名字','行业','统计日期','统计时价','低价指数','当前价格','当前低价指数'];
   filters = [
     new StockFilter('增长率为正的', true) ,
     new StockFilter('上市满一年的', true) ,
@@ -80,12 +80,14 @@ export class StockRecommendComponent implements OnInit {
     this.curService.getCurrentStockData(codes)
       .then(res => {
         console.log(res.list.length);
-        this.stockCurrents = res.list.map(item => {
+        this.stockCurrents = res.list.map((item,index) => {
           let array = item.split(',');
+          let recommend = this.stockRecommends[index];
           return {
             name: array[0],
-            c_price: array[3],
-            c_time: array[30] + ' ' + array[31]
+            price: array[3],
+            time: array[30] + ' ' + array[31],
+            pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
           }
         });
 
