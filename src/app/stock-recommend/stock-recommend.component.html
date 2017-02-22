@@ -1,11 +1,12 @@
 <header class="stock-recommend-header">
-  筛选条件：
-  <ul class="stock-recommend-filter">
-    <li *ngFor="let filter of filters">
-      <st-checkbox [inputWord]="filter.text" [(ngModel)]="filter.checked"></st-checkbox>
-    </li>
-  </ul>
-  <button class="filter-button" (click)="loadRecommendData()">重新选择</button>
+  <!--筛选条件：-->
+  <!--<ul class="stock-recommend-filter">-->
+    <!--<li *ngFor="let filter of filters">-->
+      <!--<st-checkbox [inputWord]="filter.text" [(ngModel)]="filter.checked"></st-checkbox>-->
+    <!--</li>-->
+  <!--</ul>-->
+  <!--<button class="filter-button" (click)="loadRecommendData()">重新选择</button>-->
+  <p>数据更新于：{{updateDate | date : 'shortDate'}}</p>
 </header>
 
 <table class="stock-recommend-datatable">
@@ -31,6 +32,5 @@
 </table>
 
 <footer class="stock-recommend-footer">
-  <p>数据更新于：{{updateDate | date : 'shortDate'}}</p>
   <p>绿色表示当前的价格比统计计算时更低了，红色表示更高了</p>
 </footer>

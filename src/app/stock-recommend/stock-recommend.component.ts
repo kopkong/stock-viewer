@@ -20,11 +20,11 @@ export class StockRecommendComponent implements OnInit {
   currentPageIndex: number;
 
   headers = ['代码','名字','行业','统计日期','统计时价','低价指数','当前价格','当前低价指数'];
-  filters = [
-    new StockFilter('增长率为正的', true) ,
-    new StockFilter('上市满一年的', true) ,
-    new StockFilter('没有停牌', true)
-  ];
+  // filters = [
+  //   new StockFilter('增长率为正的', true) ,
+  //   new StockFilter('上市满一年的', true) ,
+  //   new StockFilter('没有停牌', true)
+  // ];
 
   constructor(private recService: StockRecommendService,
     private cfgService: ConfigService,
@@ -49,15 +49,15 @@ export class StockRecommendComponent implements OnInit {
   }
 
   loadRecommendData() {
-    let searchString = 'pageSize=10&positive='+ (this.filters[0].checked? '1' : '0')
-      + '&pageIndex=' + (this.currentPageIndex - 1)
-      + '&notNew=' + (this.filters[1].checked? '1' : '0');
+    // let searchString = 'pageSize=10&positive='+ (this.filters[0].checked? '1' : '0')
+    //   + '&pageIndex=' + (this.currentPageIndex - 1)
+    //   + '&notNew=' + (this.filters[1].checked? '1' : '0');
 
-    if(this.filters[2].checked) {
-      searchString += '&lastDate=' + this.updateDate;
-    }
+    // if(this.filters[2].checked) {
+    //   searchString += '&lastDate=' + this.updateDate;
+    // }
 
-    console.log(searchString);
+    let searchString = 'pageSize=10&positive=1&notNew=1&pageIndex=' + (this.currentPageIndex - 1);
 
     this.recService.getData(searchString)
       .then(recommends => {
@@ -90,9 +90,7 @@ export class StockRecommendComponent implements OnInit {
             pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
           }
         });
-
       })
   }
-
 
 }
