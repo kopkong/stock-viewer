@@ -13,6 +13,7 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
   const lastDate  : number = Number(request.query.lastDate);  // 最近交易日
   const notNew    : number = Number(request.query.notNew) ;   // 不是次新股
   const positive  : number = Number(request.query.positive) ; // 增长率是正的
+  const name      : string = request.query.name;      // 输入了名称
   const start     : number = pageIndex * pageSize;
   const end       : number = ( pageIndex + 1) * pageSize;
 
@@ -36,6 +37,10 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
 
   if(positive) {
     param.expand_ratio = {$gt: 0}
+  }
+
+  if(name) {
+    param.name = {$eq: name}
   }
 
   console.log(param);

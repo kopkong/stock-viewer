@@ -18,6 +18,7 @@ export class StockRecommendComponent implements OnInit {
   recommendLength : number;
   updateDate      : string;
   currentPageIndex: number;
+  searchName      : string;
 
   headers = ['名字','行业','统计时价','低价指数','当前价','推荐价','当前低价指数'];
   // filters = [
@@ -42,12 +43,6 @@ export class StockRecommendComponent implements OnInit {
       })
   }
 
-  pageSelect(page: number) {
-    this.currentPageIndex = page;
-
-    this.loadRecommendData();
-  }
-
   loadRecommendData() {
     // let searchString = 'pageSize=10&positive='+ (this.filters[0].checked? '1' : '0')
     //   + '&pageIndex=' + (this.currentPageIndex - 1)
@@ -58,6 +53,10 @@ export class StockRecommendComponent implements OnInit {
     // }
 
     let searchString = 'pageSize=10&positive=1&notNew=1&pageIndex=' + (this.currentPageIndex - 1);
+
+    if(this.searchName) {
+      searchString += '&name=' + this.searchName;
+    }
 
     this.recService.getData(searchString)
       .then(recommends => {
@@ -71,25 +70,38 @@ export class StockRecommendComponent implements OnInit {
   }
 
   loadCurrentData() {
-    let codes = this.stockRecommends.map(item => {
-      return item.code;
-    }).toString();
+    if(this.stockRecommends) {
+      let codes = this.stockRecommends.map(item => {
+        return item.code;
+      }).toString();
 
-    console.log(codes);
+      console.log(codes);
 
-    this.curService.getCurrentStockData(codes)
-      .then(res => {
-        console.log(res.list.length);
-        this.stockCurrents = res.list.map((item,index) => {
-          let array = item.split(',');
-          let recommend = this.stockRecommends[index];
-          return {
-            name: array[0],
-            price: array[3],
-            time: array[30] + ' ' + array[31],
-            pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
-          }
-        });
-      })
+      this.curService.getCurrentStockData(codes)
+        .then(res => {
+          console.log(res.list.length);
+          this.stockCurrents = res.list.map((item,index) => {
+            let array = item.split(',');
+            let recommend = this.stockRecommends[index];
+            return {
+              name: array[0],
+              price: array[3],
+              time: array[30] + ' ' + array[31],
+              pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
+            }
+          });
+        })
+    }
+  }
+
+  onEnter(value:string) {
+    this.searchName = value;
+    this.loadRecommendData();
+  }
+
+  pageSelect(page: number) {
+    this.currentPageIndex = page;
+
+    this.loadRecommendData();
   }
 }
