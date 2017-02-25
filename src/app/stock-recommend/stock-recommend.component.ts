@@ -19,7 +19,7 @@ export class StockRecommendComponent implements OnInit {
   updateDate      : string;
   currentPageIndex: number;
 
-  headers = ['代码','名字','行业','统计日期','统计时价','低价指数','当前价格','当前低价指数'];
+  headers = ['名字','行业','统计时价','低价指数','当前价','推荐价','当前低价指数'];
   // filters = [
   //   new StockFilter('增长率为正的', true) ,
   //   new StockFilter('上市满一年的', true) ,
@@ -92,5 +92,4 @@ export class StockRecommendComponent implements OnInit {
         });
       })
   }
-
 }

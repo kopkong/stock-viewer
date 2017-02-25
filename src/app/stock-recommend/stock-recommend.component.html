@@ -14,13 +14,14 @@
     <th *ngFor="let header of headers">{{header}}</th>
   </tr>
   <tr *ngFor="let stockRec of stockRecommends; let i = index" class="stock-recommend-datarow">
-    <td>{{stockRec.code}}</td>
+    <!--<td>{{stockRec.code}}</td>-->
     <td>{{stockRec.name}}</td>
     <td>{{stockRec.industry}}</td>
-    <td>{{stockRec.last_date | date : 'shortDate'}}</td>
+    <!--<td>{{stockRec.last_date | date : 'shortDate'}}</td>-->
     <td>{{stockRec.last_close.toFixed(2)}}</td>
     <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
     <td *ngIf="stockCurrents[i]" >{{ stockCurrents[i].price }}</td>
+    <td>{{ (stockRec.last_close * .975).toFixed(2) }}</td>
     <td *ngIf="stockCurrents[i]" [ngClass]="{'lower':stockCurrents[i].pe_ratio < stockRec.last_pe_ratio,'higher':stockCurrents[i].pe_ratio > stockRec.last_pe_ratio}">{{  stockCurrents[i].pe_ratio.toFixed(2)}}</td>
   </tr>
   <tr [hidden]="recommendLength">
