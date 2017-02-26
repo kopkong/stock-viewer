@@ -11,17 +11,16 @@ const propName = ['code','name','industry'];
 const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
   files = fs.readdirSync(path.resolve(stockDataPath,'stock data')),
   fileLength = files.length,
-  statsArray = [],
   basicInfoMap = new Map();
 
-let cursor = 0;
-console.time('分析已完毕');
+let statsArray = [],
+  tableName = 'analysis', cursor = 0;
 
 function loopStock() {
   if(cursor >= fileLength){
     console.timeEnd('分析已完毕');
-    mongo_helper.deleteDocuments('pe_analysis', {}, function() {
-      mongo_helper.insertDocuments('pe_analysis', statsArray);
+    mongo_helper.deleteDocuments(tableName, {}, function() {
+      mongo_helper.insertDocuments(tableName, statsArray);
     });
 
     return;
@@ -37,29 +36,28 @@ function analysisOneStock(doc) {
     totalPE = 0,
     validSamples = 0;
 
-  doc.forEach(d => {
-    if (d.PE_TTM) {
-      if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
-
-      if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
-
-      totalPE += Number(d.PE_TTM);
-
-      validSamples ++ ;
-    }
-  });
-
   const firstDay = doc[doc.length - 1];
   const lastDay  = doc[0];
   const lastDate = new Date(lastDay.date);
   const newThree = firstDay.code.startsWith('sz300');
 
-  if(lastDate.getFullYear() === 2017 && !newThree) {
+  if(!newThree && lastDate.getFullYear() === 2017) {
+    doc.forEach(d => {
+      if (d.PE_TTM) {
+        if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
+
+        if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
+
+        totalPE += Number(d.PE_TTM);
+
+        validSamples ++ ;
+      }
+    });
+
     const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
     const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
       : 0;
     const basicInfo = basicInfoMap.get(firstDay.code);
-    // const name = basicInfo && basicInfo.name;
 
     const stat = {
       'code':   firstDay.code,
@@ -109,8 +107,23 @@ function getBasicInfo() {
   }
 }
 
+function getTableName() {
+  mongo_helper.findDocuments('config',{_id:-1}, function(doc) {
+    if(doc){
+      tableName = doc[0].analysis_table;
+    }
+
+    // 开始计时
+    console.time('分析已完毕');
+
+    loopStock();
+  });
+}
+
 getBasicInfo();
-loopStock();
+
+getTableName();
+
 
 
 

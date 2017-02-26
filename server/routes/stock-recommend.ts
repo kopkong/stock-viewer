@@ -26,51 +26,61 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
     // expand_ratio: {}
   };
 
-  // 拼装查询参数
-  if(lastDate) {
-    param.last_date = {$eq: lastDate }
-  }
-
-  if(notNew) {
-    param.years = {$gt: 1}
-  }
-
-  if(positive) {
-    param.expand_ratio = {$gt: 0}
-  }
-
   if(name) {
-    param.name = {$eq: name}
+    param.$or = [{name:{$eq: name}}, {code: {$eq: 'sh' + name}}, {code: {$eq: 'sz' + name}}];
+  } else {
+    param.last_pe_ratio = {$gt: 0};
+    param.min_PE = { $gt: 0 };
+    param.last_PE = { $gt: 0, $lt: 50 };
+    // 拼装查询参数
+    if(lastDate) {
+      param.last_date = {$eq: lastDate }
+    }
+
+    if(notNew) {
+      param.years = {$gt: 1}
+    }
+
+    if(positive) {
+      param.expand_ratio = {$gt: 0}
+    }
   }
 
   console.log(param);
 
   let query = helper.findDocuments({
-      name:'pe_analysis',
+    name: 'config',
+    sort: {_id: -1}
+  });
+
+  query.then(function(configV){
+    let table = configV[0].analysis_table;
+    let query2 = helper.findDocuments({
+      name: table,
       query: param,
       sort: { last_pe_ratio: 1 }
     });
 
-  query.then(function(value){
-    let ary = value;
+    query2.then(function(value){
+      let ary = value;
 
-    // // 默认是从低到高倒序排列的
-    // if(order === 'asc') {
-    //   ary = ary.reverse();
-    // }
+      // // 默认是从低到高倒序排列的
+      // if(order === 'asc') {
+      //   ary = ary.reverse();
+      // }
 
-    if(ary && ary.length > 0 ) {
-      response.json({
-        count: ary.length,
-        list: ary.slice(start,end)
-      })
-    } else {
-      response.json({
-        message: '没有数据'
-      })
-    }
+      if(ary && ary.length > 0 ) {
+        response.json({
+          count: ary.length,
+          list: ary.slice(start,end)
+        })
+      } else {
+        response.json({
+          message: '没有数据'
+        })
+      }
+    });
   });
-
 });
 
 export { stockRecommendRouter }

@@ -104,4 +104,13 @@ export class StockRecommendComponent implements OnInit {
 
     this.loadRecommendData();
   }
+
+  getClass(stockRec: any, i: number): any {
+    if (!this.stockCurrents[i]) { return null; }
+
+    return {
+      'lower': this.stockCurrents[i].pe_ratio < stockRec.last_pe_ratio,
+      'higher': this.stockCurrents[i].pe_ratio > stockRec.last_pe_ratio
+    };
+  }
 }

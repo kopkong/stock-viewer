@@ -92,11 +92,25 @@ function saveStock(stock) {
 }
 
 function logImportData() {
-  const today = indexDayArray[0].date;
+  const today   = indexDayArray[0].date;
+  const date    = new Date(today);
+  const year    = date.getFullYear().toString();
+  let month   = date.getMonth() + 1;
+  let day     = date.getDate();
 
-  console.log('最近交易日为 ： ' + new Date(today).toLocaleString());
+  if( month < 10 ) month = '0' + month;
+  if( day < 10 ) day = '0' + day;
 
-  mongo_helper.updateDocument('config',  {'name': 'import_date'}, {'name': 'import_date', 'value': today }, true );
+  let table_name = 'analysis_' + year + month + day;
+
+  console.log('最近交易日为 ： ' + table_name);
+
+  mongo_helper.insertDocuments('config', [{
+      'import_date': today,
+      'analysis_table': table_name,
+      'operation_time' : new Date().getTime()
+    }]
+  );
 }
 
 readStockCsv();

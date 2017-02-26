@@ -7,7 +7,7 @@ const MongoClient = require('mongodb').MongoClient,
     path = require('path'),
     url = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).mongo.url;
 
-console.log(url);
+// console.log(url);
 
 exports.insertDocuments = function (name, value, callback) {
     MongoClient.connect(url, function (err, db) {
@@ -70,11 +70,13 @@ exports.findDocuments = function (name, sort,callback) {
 
             db.close();
 
-          if(typeof callback === 'function') callback(docs);
+            if(typeof callback === 'function') callback(docs);
 
         });
     });
 };
+
+
 
 
 

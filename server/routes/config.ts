@@ -12,17 +12,18 @@ configRouter.get('',  (request: Request, response: Response) => {
 
   let query = helper.findDocuments({
     name: 'config',
-    query: {name: 'import_date'}
+    sort: {_id: -1}
   });
 
   query.then(function(value){
 
     if(value && value.length > 0 ) {
-      let obj = {};
+      // let ary = value[0];
+      let obj = value[0];
 
-      value.forEach(item => {
-        if(item.name) obj[item.name] = item.value;
-      });
+      // value.forEach(item => {
+      //   if(item.name) obj[item.name] = item.value;
+      // });
 
       response.json(obj);
 
