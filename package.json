@@ -25,6 +25,8 @@
     "@angular/platform-browser": "2.2.1",
     "@angular/platform-browser-dynamic": "2.2.1",
     "@angular/router": "3.2.1",
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/store": "^2.2.1",
     "@types/body-parser": "0.0.32",
     "@types/compression": "0.0.33",
     "@types/cors": "0.0.33",

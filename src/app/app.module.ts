@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { StoreModule } from '@ngrx/store';
 import { HashLocationStrategy, Location, LocationStrategy} from '@angular/common';
 
 import './rxjs-extension';
@@ -23,6 +24,8 @@ import { StockSearchComponent } from './stock-search/stock-search.component';
 import { CheckboxComponent } from '../common/checkbox/checkbox.component';
 import { ButtonComponent } from '../common/button/button.component' ;
 
+import { stockRecommendReducer } from '../reducer/stock-recommend';
+
 
 @NgModule({
   declarations: [
@@ -40,7 +43,8 @@ import { ButtonComponent } from '../common/button/button.component' ;
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.provideStore({ stockRecommend: stockRecommendReducer})
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
     StockRecommendService, ConfigService, StockCurrentService ],

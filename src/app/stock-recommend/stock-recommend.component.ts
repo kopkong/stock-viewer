@@ -4,7 +4,6 @@ import { StockRecommend } from '../../model/stock-recommend';
 import { StockRecommendService } from '../../service/stock-recommend.service';
 import { ConfigService } from '../../service/config.service';
 import { StockCurrentService } from '../../service/stock-current.service';
-import { StockFilter } from '../../model/filter';
 
 @Component({
   selector: 'stock-recommend',
@@ -112,5 +111,20 @@ export class StockRecommendComponent implements OnInit {
       'lower': this.stockCurrents[i].pe_ratio < stockRec.last_pe_ratio,
       'higher': this.stockCurrents[i].pe_ratio > stockRec.last_pe_ratio
     };
+  }
+
+  getCurrentFloatClass(stockRec: StockRecommend, i: number): any {
+    if (!this.stockCurrents[i]) { return null; }
+
+    return {
+      'lower': this.stockCurrents[i].price < stockRec.last_close,
+      'higher': this.stockCurrents[i].price > stockRec.last_close
+    }
+  }
+
+  getCurrentFloatRange(stockRec: StockRecommend, i: number): any {
+    if (!this.stockCurrents[i]) { return null; }
+
+    return (this.stockCurrents[i].price - stockRec.last_close) / stockRec.last_close;
   }
 }

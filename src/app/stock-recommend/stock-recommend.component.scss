@@ -73,14 +73,6 @@
 
   td {
     padding: .5em;
-
-    &.lower {
-      color: #1abc9c;
-    }
-
-    &.higher {
-      color:#e52c39;
-    }
   }
 
   tr:nth-of-type(2n+1){
@@ -95,5 +87,13 @@
   td.pager {
     text-align: left;
     padding-left: 0;
+  }
+
+  .lower {
+    color: #1abc9c;
+  }
+
+  .higher {
+    color:#e52c39;
   }
 }
