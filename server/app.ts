@@ -8,6 +8,10 @@ import * as path from 'path';
 import * as cors from 'cors';
 import * as compression from 'compression';
 
+const passport          = require('passport');
+const LocalStrategy     = require('passport-local').Strategy;
+const RemeberMeStategy  = require('passport-remember-me').Strategy;
+
 import {publicRouter} from './routes/public';
 import {stockRouter} from './routes/stock';
 import {stockRecommendRouter} from './routes/stock-recommend';
