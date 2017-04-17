@@ -17,14 +17,7 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
   const start     : number = pageIndex * pageSize;
   const end       : number = ( pageIndex + 1) * pageSize;
 
-  var param = <any>{
-    last_pe_ratio: { $gt: 0 },
-    min_PE: { $gt: 0 },
-    last_PE: { $gt: 0, $lt: 50 },
-    // last_date: {},
-    // years: {},
-    // expand_ratio: {}
-  };
+  let param = <any>{};
 
   if(name) {
     param.$or = [{name:{$eq: name}}, {code: {$eq: 'sh' + name}}, {code: {$eq: 'sz' + name}}];
@@ -32,6 +25,7 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
     param.last_pe_ratio = {$gt: 0};
     param.min_PE = { $gt: 0 };
     param.last_PE = { $gt: 0, $lt: 50 };
+
     // 拼装查询参数
     if(lastDate) {
       param.last_date = {$eq: lastDate }
@@ -45,8 +39,6 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
       param.expand_ratio = {$gt: 0}
     }
   }
-
-  console.log(param);
 
   let query = helper.findDocuments({
     name: 'config',
