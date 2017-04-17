@@ -35,7 +35,7 @@ export class StockRecommendComponent implements OnInit {
     this.currentPageIndex = 1;
 
     this.cfgService.getData()
-      .then(config => {
+      .subscribe(config => {
         this.updateDate = config.import_date;
 
         this.loadRecommendData();
@@ -43,29 +43,19 @@ export class StockRecommendComponent implements OnInit {
   }
 
   loadRecommendData() {
-    // let searchString = 'pageSize=10&positive='+ (this.filters[0].checked? '1' : '0')
-    //   + '&pageIndex=' + (this.currentPageIndex - 1)
-    //   + '&notNew=' + (this.filters[1].checked? '1' : '0');
 
-    // if(this.filters[2].checked) {
-    //   searchString += '&lastDate=' + this.updateDate;
-    // }
+    let observable = this.searchName ? this.recService.getStockRecommendByName(this.searchName):
+      this.recService.getStockRecommendList(this.currentPageIndex - 1);
 
-    let searchString = 'pageSize=10&positive=1&notNew=1&pageIndex=' + (this.currentPageIndex - 1);
-
-    if(this.searchName) {
-      searchString += '&name=' + this.searchName;
-    }
-
-    this.recService.getData(searchString)
-      .then(recommends => {
-        if(recommends) {
+    observable
+      .subscribe(
+        recommends => {
           this.stockRecommends = recommends.list;
           this.recommendLength = Math.ceil(recommends.count / 10);
 
           this.loadCurrentData();
         }
-      } );
+      );
   }
 
   loadCurrentData() {
@@ -74,22 +64,21 @@ export class StockRecommendComponent implements OnInit {
         return item.code;
       }).toString();
 
-      console.log(codes);
-
       this.curService.getCurrentStockData(codes)
-        .then(res => {
-          console.log(res.list.length);
-          this.stockCurrents = res.list.map((item,index) => {
-            let array = item.split(',');
-            let recommend = this.stockRecommends[index];
-            return {
-              name: array[0],
-              price: array[3],
-              time: array[30] + ' ' + array[31],
-              pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
-            }
-          });
-        })
+        .subscribe(
+          response => {
+            this.stockCurrents = response.list.map((item,index) => {
+              let array = item.split(',');
+              let recommend = this.stockRecommends[index];
+              return {
+                name: array[0],
+                price: array[3],
+                time: array[30] + ' ' + array[31],
+                pe_ratio: (array[3] * recommend.last_PE) / (recommend.last_close * recommend.min_PE)
+              }
+            });
+          }
+        );
     }
   }
 

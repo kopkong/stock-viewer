@@ -16,6 +16,7 @@ configRouter.get('',  (request: Request, response: Response) => {
   });
 
   query.then(function(value){
+    console.log(value);
 
     if(value && value.length > 0 ) {
       // let ary = value[0];

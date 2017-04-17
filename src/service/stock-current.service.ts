@@ -3,8 +3,7 @@
  */
 import { BaseService } from './base.service';
 import { Injector, Injectable } from '@angular/core';
-
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class StockCurrentService extends BaseService {
@@ -17,7 +16,7 @@ export class StockCurrentService extends BaseService {
     super(injector);
   }
 
-  getCurrentStockData(code: string) : Promise<any> {
+  getCurrentStockData(code: string) : Observable<any> {
     this.url = '/api/stockCurrent/' + code;
     return super.getData();
   }
