@@ -25,6 +25,8 @@ import { CheckboxComponent } from '../common/checkbox/checkbox.component';
 import { ButtonComponent } from '../common/button/button.component' ;
 
 import { stockRecommendReducer } from '../reducer/stock-recommend';
+import { IndexComponent } from './index/index.component';
+import {StockDayService} from "../service/stock-day.service";
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import { stockRecommendReducer } from '../reducer/stock-recommend';
     FixedFloatPipe,
     FixedPercenterPipe,
     CheckboxComponent,
-    ButtonComponent
+    ButtonComponent,
+    IndexComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,7 @@ import { stockRecommendReducer } from '../reducer/stock-recommend';
     StoreModule.provideStore({ stockRecommend: stockRecommendReducer})
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
-    StockRecommendService, ConfigService, StockCurrentService ],
+    StockRecommendService, ConfigService, StockCurrentService, StockDayService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

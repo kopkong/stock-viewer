@@ -41,4 +41,12 @@ body {
   border: 0;
 }
 
+.lower {
+  color: #1abc9c;
+}
+
+.higher {
+  color:#e52c39;
+}
+
 

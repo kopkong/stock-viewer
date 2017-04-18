@@ -1,0 +1,4 @@
+<p class="stock-index">
+  大盘走向：{{startIndex}} ～ {{currentIndex}}
+  <span [ngClass]="{'higher' : changeRate > 0, 'lower' : changeRate < 0}">（{{changeRate.toFixed(2)}}%）</span>
+</p>

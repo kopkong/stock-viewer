@@ -14,9 +14,22 @@ stockRouter.get('/:id',  (request: Request, response: Response) => {
     const pageSize  : any = request.query.pageSize  || 10;
     const start : Number = pageIndex * pageSize;
     const end   : Number = ( pageIndex + 1) * pageSize;
+    const dateStart : Number = request.query.dateStart || 0;
+    const dateEnd   : Number = request.query.dateEnd || 0;
+
+    console.log(stockNo);
+
+    let queryParam = <any>{};
+
+    if(dateStart && dateEnd && dateEnd > dateStart) {
+      queryParam.$and = [{date: {$lte: dateEnd}}, {date: {$gte: dateStart}}];
+    }
 
     if(stockNo) {
-        let query = helper.findDocuments(stockNo);
+        let query = helper.findDocuments({
+          name:stockNo,
+          query: queryParam
+        });
 
         query.then(function(value){
             let ary = value;
