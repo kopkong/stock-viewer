@@ -30,6 +30,8 @@ export default class Helper {
 
         var collection = db.collection(param.name);
 
+        console.log(JSON.stringify(param));
+
         return yield collection.find(param.query).sort(param.sort).toArray();
 
     });
