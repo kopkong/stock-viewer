@@ -10,8 +10,11 @@ import { Observable } from 'rxjs';
 })
 
 export class IndexComponent implements OnChanges {
-  private _indexCode = 'sh000001';
+  private _indexCode = 'sh000001'; //  上证指数
   private _startDate : number;
+  currentIndex  : number = 0;   // 当前指数
+  startIndex    : number = 0;   // 起始日期的指数
+  changeRate    : number = 0;   // 变化率
 
   // 指数起始日期
   @Input()
@@ -22,10 +25,6 @@ export class IndexComponent implements OnChanges {
   get startDate() : number {
     return this._startDate;
   }
-
-  currentIndex  : number = 0;   // 当前指数
-  startIndex    : number = 0; // 起始日期的指数
-  changeRate    : number = 0; // 变化率
 
   constructor(private dayService: StockDayService,
     private curService: StockCurrentService

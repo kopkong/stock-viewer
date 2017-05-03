@@ -22,6 +22,9 @@ stockRecommendRouter.get('',  (request: Request, response: Response) => {
   if(name) {
     param.$or = [{name:{$eq: name}}, {code: {$eq: 'sh' + name}}, {code: {$eq: 'sz' + name}}];
   } else {
+    // 基础查询参数
+    // 最后一个交易日 PE为正且小于50
+    // 最低PE为正
     param.last_pe_ratio = {$gt: 0};
     param.min_PE = { $gt: 0 };
     param.last_PE = { $gt: 0, $lt: 50 };
