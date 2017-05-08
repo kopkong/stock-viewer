@@ -27,6 +27,7 @@ import { ButtonComponent } from '../common/button/button.component' ;
 import { stockRecommendReducer } from '../reducer/stock-recommend';
 import { IndexComponent } from './index/index.component';
 import {StockDayService} from "../service/stock-day.service";
+import { StockAnalysisComponent } from './stock-analysis/stock-analysis.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import {StockDayService} from "../service/stock-day.service";
     FixedPercenterPipe,
     CheckboxComponent,
     ButtonComponent,
-    IndexComponent
+    IndexComponent,
+    StockAnalysisComponent
   ],
   imports: [
     BrowserModule,

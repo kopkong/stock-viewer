@@ -11,6 +11,8 @@ const MongoClient = require('mongodb').MongoClient,
 // console.log(url);
 
 exports.insertDocuments = function (name, value, callback) {
+  if(value.length ===0) return;
+
   MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);
 
@@ -58,13 +60,13 @@ exports.updateDocument = function (name, filter, update, upsert, callback) {
   });
 };
 
-exports.findDocuments = co.wrap(function *(name, sort) {
+exports.findDocuments = co.wrap(function *(name, query, sort) {
 
   try {
     const db = yield MongoClient.connect(url);
 
     let collection = db.collection(name),
-      doc = yield collection.find({}).sort(sort).toArray();
+      doc = yield collection.find(query).sort(sort).toArray();
 
     db.close();
 

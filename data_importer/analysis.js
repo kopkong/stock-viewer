@@ -9,7 +9,10 @@ const path = require('path'),
 const propName = ['code','name','industry'];
 
 const stockDataPath = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../proxy.conf.json'),'utf8')).csv.path,
-  files = fs.readdirSync(path.resolve(stockDataPath,'stock data')),
+  files = fs.readdirSync(path.resolve(stockDataPath,'stock data'))
+    .filter(item=> {
+      return !item.startsWith('sz300'); // 不需要300 创业版的数据
+    }),
   fileLength = files.length;
 
 let stats = new Map(),
@@ -23,7 +26,7 @@ function startAnalysis(){
   if(fileIndex < fileLength) {
 
     let name = files[fileIndex].replace('.csv','');
-    mongo_helper.findDocuments(name, {data: -1})
+    mongo_helper.findDocuments(name,{}, {data: -1})
       .then(value => {
         // analysisOneStock(fileIndex,value);
         analysisStockHistory(fileIndex, value);
@@ -41,7 +44,8 @@ function finishAnalysis(){
   mongo_helper.insertDocuments('historyTradeStatsDate', [
     {
       import_date: new Date().getTime(),
-      trade_dates: statsTradeDateArray
+      import_dayString: new Date().toLocaleDateString(),
+      trade_dates: statsTradeDateArray.slice(1, statsTradeDateArray.length -1)
     }
   ]);
 
@@ -114,8 +118,6 @@ function analysisOneStock(index,doc) {
 function analysisStockHistory(index, doc) {
   if(doc.length <= 0) return;
 
-  if(doc[0].code.startsWith('sz300')) return;
-
   console.log(doc[0].code + '分析中: ' + (index + 1) + ' / ' + fileLength);
 
   for(let idx = 1; idx < statsTradeDateArray.length; idx++){
@@ -132,8 +134,6 @@ function analysisStockHistory(index, doc) {
 
     const firstDay = allSamples[allSamples.length - 1];
     const lastDay  = allSamples[0];
-    // console.log('lastDay is : ' + new Date(lastDay.date));
-    // console.log('allSamples count : ' + allSamples.length);
 
     if(tradeStatDate - lastDay.date > 30* 24 * 3600 * 1000 ) {
       // console.log('数据太老，放弃继续处理。');
@@ -169,12 +169,14 @@ function analysisStockHistory(index, doc) {
       'last_price': Number(lastDay.adjust_price),
       'last_close': Number(lastDay.close),
       'compare_price' : compareDay && Number(compareDay.adjust_price),
+      'compare_close' : compareDay && Number(compareDay.close),
+      'compare_date' : compareDay && Number(compareDay.date),
       'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
       'years' : years,
       'expand_ratio' : expand_ratio,
       'name' : basicInfo && basicInfo.name,
       'industry': basicInfo&& basicInfo.industry,
-      'traded_market_value': lastDay.traded_market_value
+      'traded_market_value': Number(lastDay.traded_market_value)
     };
 
     // make sure data is valid

@@ -19,7 +19,9 @@ stockRouter.get('/:id', (request: Request, response: Response) => {
 
   let queryParam = <any>{};
 
-  if (dateStart && dateEnd && dateEnd >= dateStart) {
+  if(dateStart !== 0 && dateStart === dateEnd) {
+    queryParam.date = {$eq : dateStart};
+  } else if (dateEnd > dateStart) {
     queryParam.$and = [{date: {$lte: dateEnd}}, {date: {$gte: dateStart}}];
   }
 

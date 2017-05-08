@@ -17,6 +17,7 @@ import {stockRouter} from './routes/stock';
 import {stockRecommendRouter} from './routes/stock-recommend';
 import {configRouter} from './routes/config';
 import {stockCurrentRouter} from './routes/stock-current';
+import {analysisRouter} from './routes/analysis';
 
 const app: express.Application = express();
 
@@ -40,6 +41,7 @@ app.use('/api/stock', stockRouter);
 app.use('/api/stockRecommend', stockRecommendRouter);
 app.use('/api/config', configRouter);
 app.use('/api/stockCurrent', stockCurrentRouter);
+app.use('/api/analysis', analysisRouter);
 
 if (app.get('env') === 'production') {
 
