@@ -8,8 +8,8 @@
   <tr class="stock-recommend-dataheader">
     <th *ngFor="let header of headers">{{header}}</th>
   </tr>
-  <tr *ngFor="let stockRec of stockRecommends; let i = index" class="stock-recommend-datarow">
-    <td >{{stockRec.name}}</td>
+  <tr *ngFor="let stockRec of stockRecommends; let i = index">
+    <td (onClick)="onRecommendItemHover(stockRec)">{{stockRec.name}}</td>
     <td>{{stockRec.industry}}</td>
     <td>{{stockRec.last_close.toFixed(2)}}</td>
     <td>{{ stockRec.last_pe_ratio | fixedFloat : 2}}</td>
@@ -21,11 +21,6 @@
   <tr [hidden]="recommendLength">
     <td [attr.colspan]="headers.length" >没有查询到数据哦！</td>
   </tr>
-  <tr>
-    <td [attr.colspan]="headers.length" class="pager"><page [pageTotal]="recommendLength" [pageIndex]="currentPageIndex" (onPageSelect)="pageSelect($event)"></page></td>
-  </tr>
 </table>
 
-<footer class="stock-recommend-footer">
-  <p>绿色表示当前的价格比统计计算时更低了，红色表示更高了</p>
-</footer>
+<page [pageTotal]="recommendLength" [pageIndex]="currentPageIndex" (onPageSelect)="pageSelect($event)"></page>

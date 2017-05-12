@@ -1,20 +1,22 @@
+@import '../../styles/color';
+
 $font-size: 16px;
 $padding: 5px;
 
 .page-container {
   display: inline-block;
   box-sizing: border-box;
-  color: #9095aa;
-  background: #2b2937;
+  color: $searchBar-text-color;
+  background: $searchBar-bg-color;
   border-radius: 5px;
   font-size: $font-size;
   margin-top: 10px;
+  border: 1px solid $gray-border-color;
 }
 
 .page-prev,.page-next {
-  box-sizing: border-box;
   color: white;
-  background: #313855;
+  //background: #313855;
   width: 20px;
   font-size: 18px;
   line-height: 40px;
@@ -38,10 +40,10 @@ $padding: 5px;
   display: inline-block;
   box-sizing: border-box;
   text-align: center;
-  background: #2b2937;
+  //background: #2b2937;
 
   li:hover {
-    color: salmon;
+    color: $left-menu-bg-color;
     cursor: pointer;
   }
 }
@@ -54,7 +56,7 @@ $padding: 5px;
   margin: 0 5px;
 
   &.cur {
-    background: #394264;
+    background: $left-menu-bg-color;
     color: #fff;
   }
 }

@@ -2,7 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { StoreModule } from '@ngrx/store';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+// import createLogger from 'redux-logger';
+// import { rootReducer } from '../reducer/index';
 import { HashLocationStrategy, Location, LocationStrategy} from '@angular/common';
 
 import './rxjs-extension';
@@ -14,6 +16,9 @@ import { StockRecommendService } from '../service/stock-recommend.service';
 import { StockCurrentService } from '../service/stock-current.service';
 import { ConfigService } from '../service/config.service';
 
+import { rootReducer , IAppState, INITIAL_STATE } from '../reducer/store';
+import { AnalysisActions } from '../reducer/stock-analysis.action';
+import { DataCacheService } from '../service/cache';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
@@ -26,8 +31,11 @@ import { ButtonComponent } from '../common/button/button.component' ;
 
 import { stockRecommendReducer } from '../reducer/stock-recommend';
 import { IndexComponent } from './index/index.component';
-import {StockDayService} from "../service/stock-day.service";
+import { StockDayService} from "../service/stock-day.service";
+import { StockAnalysisService } from '../service/stock-analysis.service';
 import { StockAnalysisComponent } from './stock-analysis/stock-analysis.component';
+import { StockRecommendItemHoverComponent } from './stock-recommend-item-hover/stock-recommend-item-hover.component';
+import { StockAnalysisDetailComponent } from './stock-analysis-detail/stock-analysis-detail.component';
 
 
 @NgModule({
@@ -42,17 +50,27 @@ import { StockAnalysisComponent } from './stock-analysis/stock-analysis.componen
     CheckboxComponent,
     ButtonComponent,
     IndexComponent,
-    StockAnalysisComponent
+    StockAnalysisComponent,
+    StockRecommendItemHoverComponent,
+    StockAnalysisDetailComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    StoreModule.provideStore({ stockRecommend: stockRecommendReducer})
+    NgReduxModule
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy},
-    StockRecommendService, ConfigService, StockCurrentService, StockDayService ],
+    StockRecommendService, ConfigService, StockCurrentService, StockDayService, StockAnalysisService,
+    AnalysisActions, DataCacheService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  // constructor(ngRedux: NgRedux<IAppState>) {
+  //   ngRedux.configureStore(
+  //     rootReducer,
+  //     INITIAL_STATE
+  //   )
+  // }
+}

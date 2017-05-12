@@ -15,6 +15,8 @@ export class StockRecommend {
   last_pe_ratio: number;
   years: number;
   expand_ratio: number;
+  name: string;
+  industry: string;
 
   getChineseName(prop) {
     const cn_Names = {

@@ -1,0 +1,20 @@
+<h1>
+  以下为已统计的历史数据：（总计：{{analysisList.length}} 跑赢大盘：{{winCount}}）
+</h1>
+
+<ul class="analysis-list" >
+  <li *ngFor="let date of analysisList; let i = index">
+    <span class="index">{{i+1}}. </span>
+    <a routerLink="/stock-analysis/{{date}}">统计日：{{ date| date : 'shortDate'}}</a>
+    <span *ngIf="analysisMap.has(date)" class="stats-number">
+      【
+      10支股票的平均变化：
+      <span [ngClass]="{'higher': analysisMap.get(date).averageRate > 0 ,'lower': analysisMap.get(date).averageRate < 0}">
+        {{analysisMap.get(date).averageRate | fixedPercent : 2}}</span>
+      大盘指数的变化：
+      <span [ngClass]="{'higher': analysisMap.get(date).indexRate > 0 ,'lower': analysisMap.get(date).indexRate < 0}">
+        {{analysisMap.get(date).indexRate | fixedPercent : 2}}</span>
+      】
+    </span>
+  </li>
+</ul>

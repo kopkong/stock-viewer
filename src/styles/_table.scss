@@ -1,0 +1,42 @@
+@import 'color';
+
+%datatable {
+  border-collapse: collapse;
+  border: 1px solid $gray-border-color;
+  width: 100%;
+
+  th, td {
+    min-width: 100px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  th {
+    padding: 1em;
+    //color: #9095aa;
+  }
+
+  td {
+    color: $table-text-color;
+    padding: .5em;
+  }
+
+  tr:nth-of-type(2n+1){
+    background: $table-alternate-bg-color;
+  }
+
+  tr:last-of-type{
+    background: #fff;
+  }
+
+  tr:first-of-type{
+    background: #f7f6f1;
+    color: $table-text-color;
+    border: 1px solid $gray-border-color;
+  }
+
+  td.pager {
+    text-align: left;
+    padding-left: 0;
+  }
+}

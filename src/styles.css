@@ -3,6 +3,7 @@
 *, *::after, ::before {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 p, div {
@@ -19,12 +20,23 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 html {
   font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+  height: 100%;
 }
 
 body {
+  height: 100%;
   /*min-width: 1024px;*/
+}
+
+app-root{
+  display: block;
+  height: 100%;
 }
 
 .root-loading {
@@ -42,11 +54,19 @@ body {
 }
 
 .lower {
-  color: #1abc9c;
+  color: #1abc9c !important;
 }
 
 .higher {
-  color:#e52c39;
+  color:#e52c39 !important;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr20 {
+  margin-right: 20px;
 }
 
 

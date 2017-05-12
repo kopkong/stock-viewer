@@ -1,0 +1,45 @@
+@import '../../styles/color';
+
+:host {
+  display: block;
+  overflow: auto;
+  padding: 20px 30px;
+}
+
+h1 {
+  font-size: 16px;
+  color: $title-text-color;
+}
+
+.analysis-list {
+  //background: $searchBar-bg-color;
+  color: $searchBar-text-color;
+  list-style: none;
+
+  li {
+    margin: 4px;
+    cursor: pointer;
+
+    .index {
+      display: inline-block;
+      width: 30px;
+    }
+
+    a {
+      display: inline-block;
+      width: 160px;
+    }
+
+    a:visited {
+      color: $table-text-color;
+    }
+
+    a:link {
+      color: $searchBar-text-color;
+    }
+
+    .stats-number {
+      //margin-left: 10px;
+    }
+  }
+}

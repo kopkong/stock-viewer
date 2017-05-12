@@ -10,5 +10,9 @@ import { Observable } from 'rxjs';
 export class AppComponent {
   observable$: Observable<{}>;
 
-  title = 'app works!';
+  title:string = 'app works!';
+
+  today:string = new Date().toLocaleDateString();
+
+  contentName: string = '股票数据管理';
 }

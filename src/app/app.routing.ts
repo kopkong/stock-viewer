@@ -6,11 +6,21 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StockRecommendComponent } from './stock-recommend/stock-recommend.component';
 import { StockComponent } from './stock/stock.component';
+import { StockAnalysisComponent } from './stock-analysis/stock-analysis.component';
+import { StockAnalysisDetailComponent} from "./stock-analysis-detail/stock-analysis-detail.component";
 
 const routes : Routes = [
   {
     path: 'stock-recommend',
     component: StockRecommendComponent
+  },
+  {
+    path: 'stock-analysis',
+    component: StockAnalysisComponent
+  },
+  {
+    path: 'stock-analysis/:id',
+    component: StockAnalysisDetailComponent
   },
   {
     path: 'stock/:id',

@@ -1,5 +1,4 @@
-
-import { BaseService } from 'base.service';
+import { BaseService } from './base.service';
 import { Injector, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,12 +11,12 @@ export class StockAnalysisService extends BaseService {
   }
 
   getAnalysisList() : Observable<any> {
-    this.url = 'api/analysis/';
+    this.url = '/api/analysis';
     return super.getData();
   }
 
   getAnalysis(date: number) : Observable<any> {
-    this.url = 'api/analysis/' + date;
+    this.url = '/api/analysis/' + date;
     return super.getData();
   }
 

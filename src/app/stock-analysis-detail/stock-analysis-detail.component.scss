@@ -1,0 +1,21 @@
+@import '../../styles/color';
+@import '../../styles/table';
+
+:host {
+  display: block;
+  overflow: auto;
+  padding: 20px 30px;
+}
+
+.stock-analysis-header {
+  padding: 10px 0;
+}
+
+.stock-analysis-datatable {
+  @extend %datatable;
+}
+
+.stock-analysis-footer {
+  padding: 10px 0;
+  color: $table-text-color;
+}

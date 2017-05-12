@@ -1,0 +1,42 @@
+<header class="stock-analysis-header">
+  <span class="mr10">10支股票的平均变化：
+      <span [ngClass]="{'higher': analysisData.averageRate > 0 ,'lower': analysisData.averageRate < 0}">
+        {{analysisData.averageRate | fixedPercent : 2}}</span>
+  </span>
+
+  <span class="mr10">大盘指数的变化：
+      <span [ngClass]="{'higher': analysisData.indexRate > 0 ,'lower': analysisData.indexRate < 0}">
+        {{analysisData.indexRate | fixedPercent : 2}}</span>
+  </span>
+
+  <span>
+    统计日：{{analysisData.list[0].last_date | date : 'yyyy-MM-dd'}}
+    对比日：{{analysisData.list[0].compare_date | date : 'yyyy-MM-dd'}}
+  </span>
+</header>
+
+<table class="stock-analysis-datatable">
+  <tr>
+    <td>名字</td>
+    <td>行业</td>
+    <td>统计时价</td>
+    <td>一个月后价</td>
+    <td>变化</td>
+    <td>统计日低价指数</td>
+  </tr>
+  <tr *ngFor="let item of analysisData.list; let i = index">
+    <td>{{item.name}}</td>
+    <td>{{item.industry}}</td>
+    <td>{{item.last_close}}({{item.last_price.toFixed(2)}})</td>
+    <td>{{item.compare_close}}({{item.compare_price.toFixed(2)}})</td>
+    <td [ngClass]="{'higher': item.changeRate > 0 ,'lower': item.changeRate < 0}">{{item.changeRate | fixedPercent: 2}}</td>
+    <td>{{item.last_pe_ratio | fixedFloat : 2}}</td>
+  </tr>
+  <tr [hidden]="analysisData.list.length">
+    <td [attr.colspan]="6">没有查询到数据哦！</td>
+  </tr>
+</table>
+
+<footer class="stock-analysis-footer">
+  括号内的价格为除权价
+</footer>

@@ -1,4 +1,3 @@
-
 const MongoDb   = require('mongodb');
 const assert    = require('assert');
 const co        = require('co');
@@ -26,13 +25,18 @@ export default class Helper {
     }
 
     findDocuments = co.wrap(function*(param) {
-        var db = yield MongoClient.connect(URL);
+      try {
+        const db = yield MongoClient.connect(URL);
 
-        var collection = db.collection(param.name);
+        let collection = db.collection(param.name),
+          doc = yield collection.find(param.query).sort(param.sort).toArray();
 
-        // console.log(JSON.stringify(param));
+        db.close();
 
-        return yield collection.find(param.query).sort(param.sort).toArray();
+        return yield doc;
 
+      } catch(err) {
+        console.error(err);
+      }
     });
 }

@@ -1,15 +1,17 @@
-<h1 class="menu-header">
-  咕咕咕
-</h1>
+<!--<h1 class="menu-header">-->
+  <!--咕咕咕-->
+<!--</h1>-->
 
-<!--<nav>-->
-  <!--<a routerLink="/stock-recommend" routerLinkActive="active">筛选股票</a>-->
-  <!--<a routerLink="/stock" routerLinkActive="active">详细查看</a>-->
-  <!--<a routerLink="/bronze" routerLinkActive="active">其他1</a>-->
-  <!--<a routerLink="/porcelain" routerLinkActive="active">其他2</a>-->
-<!--</nav>-->
+<nav>
+  <div class="nav-header">今天：{{today}}</div>
+  <a routerLink="/stock-recommend" routerLinkActive="active">最新数据</a>
+  <a routerLink="/stock-analysis" routerLinkActive="active">历史数据</a>
+  <a routerLink="/bronze" routerLinkActive="active">其他1</a>
+  <a routerLink="/porcelain" routerLinkActive="active">其他2</a>
+</nav>
 
 <section class="content">
+  <div class="content-header">{{contentName}}</div>
   <router-outlet></router-outlet>
 </section>
 

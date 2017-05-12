@@ -20,11 +20,6 @@ export class StockRecommendComponent implements OnInit {
   searchName      : string;
 
   headers = ['名字','行业','统计时价','低价指数','当前价','推荐价','当前低价指数'];
-  // filters = [
-  //   new StockFilter('增长率为正的', true) ,
-  //   new StockFilter('上市满一年的', true) ,
-  //   new StockFilter('没有停牌', true)
-  // ];
 
   constructor(private recService: StockRecommendService,
     private cfgService: ConfigService,
@@ -85,6 +80,10 @@ export class StockRecommendComponent implements OnInit {
   onEnter(value:string) {
     this.searchName = value;
     this.loadRecommendData();
+  }
+
+  onRecommendItemHover(item: StockRecommend) {
+    console.log('hover!');
   }
 
   pageSelect(page: number) {

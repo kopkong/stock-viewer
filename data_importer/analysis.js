@@ -19,7 +19,6 @@ let stats = new Map(),
   basicInfoMap = new Map(),
   statsArray = [],
   statsTradeDateArray  = [], // 统计日期，一般是一个月的月底。
-  // tableName  = 'analysis',
   fileIndex  = 0;
 
 function startAnalysis(){
@@ -28,8 +27,7 @@ function startAnalysis(){
     let name = files[fileIndex].replace('.csv','');
     mongo_helper.findDocuments(name,{}, {data: -1})
       .then(value => {
-        // analysisOneStock(fileIndex,value);
-        analysisStockHistory(fileIndex, value);
+        analysisStock(fileIndex, value);
         fileIndex++ ;
         startAnalysis();
       })
@@ -49,6 +47,19 @@ function finishAnalysis(){
     }
   ]);
 
+  mongo_helper.findDocuments('config',{},{_id:-1})
+    .then(doc => {
+      if(doc&& doc.length) {
+        let tableName = doc[0].analysis_table;
+
+        mongo_helper.deleteDocuments(tableName, {}, function() {
+          mongo_helper.insertDocuments(tableName, statsArray);
+        });
+      }else {
+        console.log('Config not found!');
+      }
+    });
+
   for(let record of stats) {
     let tableName = 'history' + record[0];
     mongo_helper.deleteDocuments(tableName, {}, function() {
@@ -57,132 +68,137 @@ function finishAnalysis(){
   }
 }
 
-function analysisOneStock(index,doc) {
-  console.log('分析中: ' + (index + 1) + ' / ' + fileLength);
-
-  let maxPE = 0,
-    minPE = Infinity,
-    totalPE = 0,
-    validSamples = 0;
-
-  const firstDay = doc[doc.length - 1];
-  const lastDay  = doc[0];
-  const lastDate = new Date(lastDay.date);
-  const newThree = firstDay.code.startsWith('sz300');
-
-  if(!newThree && lastDate.getFullYear() === 2017) {
-    doc.forEach(d => {
-      if (d.PE_TTM) {
-        if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
-
-        if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
-
-        totalPE += Number(d.PE_TTM);
-
-        validSamples ++ ;
-      }
-    });
-
-    const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
-    const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
-      : 0;
-    const basicInfo = basicInfoMap.get(firstDay.code);
-
-    const stat = {
-      'code':   firstDay.code,
-      'max_PE': maxPE,
-      'min_PE': minPE,
-      'avg_PE': totalPE / validSamples,
-      'last_PE': Number(lastDay.PE_TTM),
-      'first_date': firstDay.date,
-      'last_date' : lastDay.date,
-      'first_price': Number(firstDay.adjust_price),
-      'last_price': Number(lastDay.adjust_price),
-      'last_close': Number(lastDay.close),
-      'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
-      'years' : years,
-      'expand_ratio' : expand_ratio,
-      'name' : basicInfo && basicInfo.name,
-      'industry': basicInfo&& basicInfo.industry,
-      'traded_market_value': lastDay.traded_market_value
-    };
-
-    // make sure data is valid
-    if(typeof stat.last_PE === 'number' && typeof stat.min_PE === 'number'){
-      statsArray.push(stat);
-    }
-  }
-
-}
-
-function analysisStockHistory(index, doc) {
+function analysisStock(index, doc) {
   if(doc.length <= 0) return;
 
   console.log(doc[0].code + '分析中: ' + (index + 1) + ' / ' + fileLength);
 
-  for(let idx = 1; idx < statsTradeDateArray.length; idx++){
-    let tradeStatDate = statsTradeDateArray[idx],    // 统计日期，一般是一个月的月底。
-      tradeCompareDate = statsTradeDateArray[idx-1], // 对比日期，一般是统计日期下一个月的月底。
-      maxPE = 0,
-      validSamples = 0,
-      minPE = Infinity,
-      totalPE = 0,
-      allSamples = [];
-
-    let compareDay = filterHistorySamples(doc, tradeStatDate, tradeCompareDate, allSamples);
-    if(allSamples.length === 0) continue;
-
-    const firstDay = allSamples[allSamples.length - 1];
-    const lastDay  = allSamples[0];
-
-    if(tradeStatDate - lastDay.date > 30* 24 * 3600 * 1000 ) {
-      // console.log('数据太老，放弃继续处理。');
-      continue;
+  for(let idx = 0; idx < statsTradeDateArray.length; idx++){
+    if(idx ===0){
+      dealCurrent(doc);
+    }else{
+      dealHistory(doc, statsTradeDateArray[idx], statsTradeDateArray[idx - 1]);
     }
+  }
+}
 
-    allSamples.forEach(d => {
-      if (d.PE_TTM) {
-        if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
+// 处理分析历史数据，非当前
+// tradeStatDate 统计日期，一般是一个月的月底。
+// tradeCompareDate 对比日期，一般是统计日期下一个月的月底。
+function dealHistory(doc, tradeStatDate, tradeCompareDate) {
+  let maxPE = 0,
+    validSamples = 0,
+    minPE = Infinity,
+    totalPE = 0,
+    allSamples = [];
 
-        if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
+  let compareDay = filterHistorySamples(doc, tradeStatDate, tradeCompareDate, allSamples);
+  if(allSamples.length === 0) return;
 
-        totalPE += Number(d.PE_TTM);
+  const firstDay = allSamples[allSamples.length - 1];
+  const lastDay  = allSamples[0];
 
-        validSamples ++ ;
-      }
-    });
+  if(tradeStatDate - lastDay.date > 30* 24 * 3600 * 1000 ) {
+    // console.log('数据太老，放弃继续处理。');
+    return;
+  }
 
-    const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
-    const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
-      : 0;
-    const basicInfo = basicInfoMap.get(firstDay.code);
+  allSamples.forEach(d => {
+    if (d.PE_TTM) {
+      if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
 
-    const stat = {
-      'code':   firstDay.code,
-      'max_PE': maxPE,
-      'min_PE': minPE,
-      'avg_PE': totalPE / validSamples,
-      'last_PE': Number(lastDay.PE_TTM),
-      'first_date': firstDay.date,
-      'last_date' : lastDay.date,
-      'first_price': Number(firstDay.adjust_price),
-      'last_price': Number(lastDay.adjust_price),
-      'last_close': Number(lastDay.close),
-      'compare_price' : compareDay && Number(compareDay.adjust_price),
-      'compare_close' : compareDay && Number(compareDay.close),
-      'compare_date' : compareDay && Number(compareDay.date),
-      'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
-      'years' : years,
-      'expand_ratio' : expand_ratio,
-      'name' : basicInfo && basicInfo.name,
-      'industry': basicInfo&& basicInfo.industry,
-      'traded_market_value': Number(lastDay.traded_market_value)
-    };
+      if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
 
-    // make sure data is valid
-    if(typeof stat.last_PE === 'number' && typeof stat.min_PE === 'number'){
-      stats.get(tradeStatDate).push(stat);
+      totalPE += Number(d.PE_TTM);
+
+      validSamples ++ ;
     }
+  });
+
+  const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
+  const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
+    : 0;
+  const basicInfo = basicInfoMap.get(firstDay.code);
+
+  const stat = {
+    'code':   firstDay.code,
+    'max_PE': maxPE,
+    'min_PE': minPE,
+    'avg_PE': totalPE / validSamples,
+    'last_PE': Number(lastDay.PE_TTM),
+    'first_date': firstDay.date,
+    'last_date' : lastDay.date,
+    'first_price': Number(firstDay.adjust_price),
+    'last_price': Number(lastDay.adjust_price),
+    'last_close': Number(lastDay.close),
+    'compare_price' : compareDay && Number(compareDay.adjust_price),
+    'compare_close' : compareDay && Number(compareDay.close),
+    'compare_date' : compareDay && Number(compareDay.date),
+    'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
+    'years' : years,
+    'expand_ratio' : expand_ratio,
+    'name' : basicInfo && basicInfo.name,
+    'industry': basicInfo&& basicInfo.industry,
+    'traded_market_value': Number(lastDay.traded_market_value)
+  };
+
+  // make sure data is valid
+  if(typeof stat.last_PE === 'number' && typeof stat.min_PE === 'number'){
+    stats.get(tradeStatDate).push(stat);
+  }
+}
+
+// 处理分析最新数据，统计到最新
+function dealCurrent(doc){
+  let
+    maxPE = 0,
+    validSamples = 0,
+    minPE = Infinity,
+    totalPE = 0,
+    allSamples = doc;
+
+  const firstDay = allSamples[allSamples.length - 1];
+  const lastDay  = allSamples[0];
+
+  allSamples.forEach(d => {
+    if (d.PE_TTM) {
+      if (d.PE_TTM > maxPE) maxPE = Number(d.PE_TTM);
+
+      if (d.PE_TTM < minPE) minPE = Number(d.PE_TTM);
+
+      totalPE += Number(d.PE_TTM);
+
+      validSamples ++ ;
+    }
+  });
+
+  const years = (lastDay.date - firstDay.date) / ( 365 * 24 * 3600 * 1000 );
+  const expand_ratio = years > 1 ? Math.pow((lastDay.adjust_price / firstDay.adjust_price) , 1 / years ) - 1
+    : 0;
+  const basicInfo = basicInfoMap.get(firstDay.code);
+
+  const stat = {
+    'code':   firstDay.code,
+    'max_PE': maxPE,
+    'min_PE': minPE,
+    'avg_PE': totalPE / validSamples,
+    'last_PE': Number(lastDay.PE_TTM),
+    'first_date': firstDay.date,
+    'last_date' : lastDay.date,
+    'first_price': Number(firstDay.adjust_price),
+    'last_price': Number(lastDay.adjust_price),
+    'last_close': Number(lastDay.close),
+    'last_pe_ratio': (lastDay.PE_TTM ) / minPE,
+    'years' : years,
+    'expand_ratio' : expand_ratio,
+    'name' : basicInfo && basicInfo.name,
+    'industry': basicInfo&& basicInfo.industry,
+    'traded_market_value': Number(lastDay.traded_market_value)
+  };
+
+  // make sure data is valid
+  if(typeof stat.last_PE === 'number' && typeof stat.min_PE === 'number'){
+    statsArray.push(stat);
   }
 }
 
@@ -271,16 +287,6 @@ function doAnalysis(){
     console.time('分析已完毕!');
     startAnalysis();
   });
-
-  // mongo_helper.findDocuments('config',{_id:-1})
-  //   .then(doc => {
-  //     tableName = doc[0].analysis_table;
-  //
-  //     // 开始计时
-  //     console.time('分析已完毕!');
-  //
-  //     startAnalysis();
-  //   });
 }
 
 doAnalysis();
