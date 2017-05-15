@@ -25,7 +25,7 @@ function startAnalysis(){
   if(fileIndex < fileLength) {
 
     let name = files[fileIndex].replace('.csv','');
-    mongo_helper.findDocuments(name,{}, {data: -1})
+    mongo_helper.findDocuments(name,{}, {date: -1})
       .then(value => {
         analysisStock(fileIndex, value);
         fileIndex++ ;
@@ -250,7 +250,7 @@ let getLastTradeDate = new Promise((resolve, reject)=>{
   let month = 0,
     array = [];
 
-  mongo_helper.findDocuments('sh000001')
+  mongo_helper.findDocuments('sh000001',{},{date:-1})
     .then(doc => {
       for(let i = 0; i< 365; i++){
         if(i=== 0) {
